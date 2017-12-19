@@ -1,4 +1,4 @@
-package com.makaji.aleksej.listopia.data.Dao;
+package com.makaji.aleksej.listopia.data.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -16,8 +16,9 @@ import java.util.List;
 
 @Dao
 public interface ShoppingListDao {
-    @Query("SELECT * FROM shoppingList")
-    LiveData<List<ShoppingList>> loadAllProducts();
+
+    @Query("SELECT * FROM shopping_list")
+    LiveData<List<ShoppingList>> loadAllShoppingLists();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ShoppingList> shoppingLists);

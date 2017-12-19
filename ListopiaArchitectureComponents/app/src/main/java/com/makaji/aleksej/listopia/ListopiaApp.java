@@ -2,6 +2,7 @@ package com.makaji.aleksej.listopia;
 
 import android.app.Activity;
 import android.app.Application;
+import android.util.Log;
 
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.di.module.AppInjector;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import timber.log.Timber;
 
 /**
  * Created by Aleksej on 12/17/2017.
@@ -23,9 +25,9 @@ public class ListopiaApp extends Application implements HasActivityInjector {
     @Override
     public void onCreate() {
         super.onCreate();
-       /* if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        }*/
+        }
         AppInjector.init(this);
     }
 

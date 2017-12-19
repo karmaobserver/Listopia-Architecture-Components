@@ -1,8 +1,11 @@
 package com.makaji.aleksej.listopia.data.entity;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
+
+import com.google.gson.annotations.SerializedName;
 
 import static com.makaji.aleksej.listopia.data.entity.ShoppingList.TABLE_NAME;
 
@@ -13,15 +16,22 @@ import static com.makaji.aleksej.listopia.data.entity.ShoppingList.TABLE_NAME;
 @Entity(tableName = TABLE_NAME)
 public class ShoppingList {
 
-    public static final String TABLE_NAME = "shoppingList";
+    public static final String TABLE_NAME = "shopping_list";
 
     @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
     private int id;
+
+    @SerializedName("name")
     private String name;
 
     public ShoppingList(int id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @Ignore
+    public ShoppingList() {
     }
 
     public int getId() {

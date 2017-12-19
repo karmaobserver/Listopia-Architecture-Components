@@ -3,7 +3,7 @@ package com.makaji.aleksej.listopia.di.module;
 import android.app.Application;
 import android.arch.persistence.room.Room;
 
-import com.makaji.aleksej.listopia.data.Dao.ShoppingListDao;
+import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.data.database.ListopiaDb;
 
 import javax.inject.Singleton;

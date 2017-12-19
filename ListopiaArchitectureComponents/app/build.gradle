@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.makaji.aleksej.listopia"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -53,6 +53,7 @@ dependencies {
     implementation deps.lifecycle.java8
     annotationProcessor deps.room.compiler
 
+    //layout
     implementation deps.constraint_layout
 
     //Dagger 2
@@ -61,6 +62,13 @@ dependencies {
     implementation deps.dagger.android_support
     annotationProcessor deps.dagger.android_support_compiler
     annotationProcessor deps.dagger.compiler
+
+    //Timber for Log
+    implementation deps.timber
+
+    //Retrofit 2
+    implementation deps.retrofit.runtime
+    implementation deps.retrofit.gson
 
     // Android Testing Support Library's runner and rules
     androidTestImplementation deps.atsl.runner

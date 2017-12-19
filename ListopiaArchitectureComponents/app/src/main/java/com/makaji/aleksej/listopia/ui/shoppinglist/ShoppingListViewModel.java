@@ -1,13 +1,23 @@
 package com.makaji.aleksej.listopia.ui.shoppinglist;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.util.Log;
 
+import com.makaji.aleksej.listopia.data.database.ListopiaDb;
+import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
+import com.makaji.aleksej.listopia.data.vo.Resource;
+import com.makaji.aleksej.listopia.util.AbsentLiveData;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 /**
  * Created by Aleksej on 12/17/2017.
@@ -15,11 +25,39 @@ import javax.inject.Inject;
 
 public class ShoppingListViewModel extends ViewModel {
 
-    private final ShoppingListRepository shoppingListRepository;
+    private final LiveData<Resource<List<ShoppingList>>> shoppingLists;
+    final MutableLiveData<String> login = new MutableLiveData<>();
+
+    @Inject
+    ShoppingListRepository shoppingListRepository;
+
 
     @Inject
     public ShoppingListViewModel(ShoppingListRepository shoppingListRepository) {
-        this.shoppingListRepository = shoppingListRepository;
-
+        //shoppingLists = shoppingListRepository.loadAllShoppingLists();
+        shoppingLists = Transformations.switchMap(login, login -> {
+            if (login == null) {
+                return AbsentLiveData.create();
+            } else {
+                return shoppingListRepository.loadAllShoppingLists();
+            }
+        });
     }
+
+    public LiveData<Resource<List<ShoppingList>>> getShoppingLists() {
+        return shoppingLists;
+    }
+
+    public void setLogin(String login) {
+        if (Objects.equals(this.login.getValue(), login)) {
+            return;
+        }
+        this.login.setValue(login);
+    }
+
+    //For quick test only
+    public void insertAll() {
+        shoppingListRepository.insertAll();
+    }
+
 }

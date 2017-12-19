@@ -11,6 +11,6 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ShoppingListActivityModule {
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = FragmentBuildersModule.class)
     abstract ShoppingListActivity contributeShoppingListActivity();
 }
