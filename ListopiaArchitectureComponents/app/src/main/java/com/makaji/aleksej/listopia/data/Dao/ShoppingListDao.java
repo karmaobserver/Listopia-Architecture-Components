@@ -22,4 +22,8 @@ public interface ShoppingListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<ShoppingList> shoppingLists);
+
+    @Query("DELETE FROM shopping_list")
+    void deleteAll();
+
 }

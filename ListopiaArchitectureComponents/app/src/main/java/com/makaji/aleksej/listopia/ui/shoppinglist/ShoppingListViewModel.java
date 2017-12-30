@@ -11,6 +11,7 @@ import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.data.vo.Resource;
 import com.makaji.aleksej.listopia.util.AbsentLiveData;
+import com.makaji.aleksej.listopia.util.SingleLiveData;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class ShoppingListViewModel extends ViewModel {
 
     private final LiveData<Resource<List<ShoppingList>>> shoppingLists;
     final MutableLiveData<String> login = new MutableLiveData<>();
+    private final SingleLiveData<Void> addShoppingListEvent = new SingleLiveData<>();
 
     @Inject
     ShoppingListRepository shoppingListRepository;
@@ -34,14 +36,14 @@ public class ShoppingListViewModel extends ViewModel {
 
     @Inject
     public ShoppingListViewModel(ShoppingListRepository shoppingListRepository) {
-        //shoppingLists = shoppingListRepository.loadAllShoppingLists();
-        shoppingLists = Transformations.switchMap(login, login -> {
+        shoppingLists = shoppingListRepository.loadAllShoppingLists();
+       /* shoppingLists = Transformations.switchMap(login, login -> {
             if (login == null) {
                 return AbsentLiveData.create();
             } else {
                 return shoppingListRepository.loadAllShoppingLists();
             }
-        });
+        });*/
     }
 
     public LiveData<Resource<List<ShoppingList>>> getShoppingLists() {
@@ -58,6 +60,22 @@ public class ShoppingListViewModel extends ViewModel {
     //For quick test only
     public void insertAll() {
         shoppingListRepository.insertAll();
+    }
+
+    //For quick delete testing only
+    public void deleteAll() {
+        shoppingListRepository.deleteAll();
+    }
+
+
+    public void onAddShoppingListClick() {
+        Timber.d("Usao u viewmodel onAdd");
+        addShoppingListEvent.call();
+    }
+
+    public SingleLiveData<Void> getAddShoppingListEvent() {
+        Timber.d("Usao u viewmodel getAdd");
+        return addShoppingListEvent;
     }
 
 }

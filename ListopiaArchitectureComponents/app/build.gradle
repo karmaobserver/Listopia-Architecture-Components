@@ -22,6 +22,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 
     /*compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -86,6 +89,10 @@ dependencies {
     androidTestImplementation deps.support.v4
     androidTestImplementation deps.support.app_compat
     androidTestImplementation deps.support.design
+
+    //Temporary due to unknowen error
+    implementation 'com.google.code.gson:gson:2.8.0'
+
 
 
 }

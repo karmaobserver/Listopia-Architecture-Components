@@ -33,13 +33,16 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     NetworkBoundResource(AppExecutors appExecutors) {
         this.appExecutors = appExecutors;
+        //Sets the ResultType to LOADING
         result.setValue(Resource.loading(null));
+        //Starts observing the results from the database
         LiveData<ResultType> dbSource = loadFromDb();
         result.addSource(dbSource, data -> {
             result.removeSource(dbSource);
             if (shouldFetch(data)) {
                 fetchFromNetwork(dbSource);
             } else {
+                //sets ResultType to SUCCESS in case we do not need to fetch data from remote
                 result.addSource(dbSource, newData -> setValue(Resource.success(newData)));
             }
         });

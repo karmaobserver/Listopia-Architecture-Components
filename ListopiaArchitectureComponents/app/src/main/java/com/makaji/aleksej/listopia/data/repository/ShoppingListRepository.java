@@ -9,6 +9,7 @@ import android.support.annotation.WorkerThread;
 import android.util.Log;
 
 import com.makaji.aleksej.listopia.data.api.ApiResponse;
+import com.makaji.aleksej.listopia.data.api.ListopiaService;
 import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.AppExecutors;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
@@ -19,31 +20,36 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 /**
  * Created by Aleksej on 12/16/2017.
  */
 
 public class ShoppingListRepository {
     private final AppExecutors appExecutors;
+    private final ListopiaService listopiaService;
     private final ShoppingListDao shoppingListDao;
 
     @Inject
-    public ShoppingListRepository(AppExecutors appExecutors, ShoppingListDao shoppingListDao) {
+    public ShoppingListRepository(AppExecutors appExecutors, ShoppingListDao shoppingListDao, ListopiaService listopiaService) {
         this.appExecutors = appExecutors;
         this.shoppingListDao = shoppingListDao;
+        this.listopiaService = listopiaService;
     }
 
     public LiveData<Resource<List<ShoppingList>>> loadAllShoppingLists() {
         return new NetworkBoundResource<List<ShoppingList>, List<ShoppingList>>(appExecutors) {
 
             @Override
-            protected void saveCallResult(@NonNull List<ShoppingList> item) {
-
+            protected void saveCallResult(@NonNull List<ShoppingList> items) {
+                Timber.d("SaveCall itemSize: " + items.size());
+                shoppingListDao.insertAll(items);
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<ShoppingList> data) {
-                return false;
+                return true;
             }
 
             @NonNull
@@ -55,7 +61,11 @@ public class ShoppingListRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<List<ShoppingList>>> createCall() {
-                return null;
+                Timber.d("Making call:");
+                LiveData<ApiResponse<List<ShoppingList>>> result = listopiaService.getShoppingLists();
+                Timber.d("Result is: " + result);
+                return result;
+                //return listopiaService.getShoppingLists();
             }
         }.asLiveData();
     }
@@ -82,5 +92,16 @@ public class ShoppingListRepository {
             shoppingLists.add(shoppingList);
         }
         return shoppingLists;
+    }
+
+    public void deleteAll() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                shoppingListDao.deleteAll();
+                return null;
+            }
+        }.execute();
+
     }
 }
