@@ -49,12 +49,13 @@ public class ShoppingListRepository {
 
             @Override
             protected boolean shouldFetch(@Nullable List<ShoppingList> data) {
-                return true;
+                return false;
             }
 
             @NonNull
             @Override
             protected LiveData<List<ShoppingList>> loadFromDb() {
+                Timber.d("LoadFromDB: ");
                 return shoppingListDao.loadAllShoppingLists();
             }
 
@@ -68,6 +69,18 @@ public class ShoppingListRepository {
                 //return listopiaService.getShoppingLists();
             }
         }.asLiveData();
+    }
+
+    //Temporary Solution
+    @SuppressLint("StaticFieldLeak")
+    public void insertShoppingList(ShoppingList shoppingList) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                shoppingListDao.insertShoppingList(shoppingList);
+                return null;
+            }
+        }.execute();
     }
 
     //For quick test only

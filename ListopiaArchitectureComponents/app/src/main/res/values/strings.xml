@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Listopia</string>
+    <string name="nav_drawer_header_sign_in">Sign In or Sign Up</string>
+    <string name="nav_drawer_header_sync">To Sync in browser and share your lists</string>
+    <string name="toolbar_shopping_list">My Lists</string>
+    <string name="toolbar_shopping_list_add">Adding New List</string>
+    <string name="fragment_shopping_list_add_list_name">List name</string>
+    <string name="fragment_shopping_list_add_fail">Failed to create list</string>
 </resources>

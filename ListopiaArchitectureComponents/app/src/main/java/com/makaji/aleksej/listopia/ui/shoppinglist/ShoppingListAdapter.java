@@ -45,14 +45,13 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_shopping_list,
                         parent, false, dataBindingComponent);
         //binding.setShowFullName(showFullName);
-        binding.getRoot().setOnClickListener(v -> {
+        binding.getRoot().setOnClickListener(view -> {
             ShoppingList shoppingList = binding.getShoppingList();
             if (shoppingList != null && shoppingListClickCallback != null) {
                 shoppingListClickCallback.onClick(shoppingList);
             }
         });
-
-        binding.getRoot().setOnLongClickListener(v -> {
+        binding.getRoot().setOnLongClickListener(view -> {
             ShoppingList shoppingList = binding.getShoppingList();
             if (shoppingList != null && shoppingListLongClickCallback != null) {
                 shoppingListLongClickCallback.onLongClick(shoppingList);
@@ -60,7 +59,7 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
             return true;
         });
 
-        binding.button.setOnClickListener(v -> {
+        binding.button.setOnClickListener(view -> {
             ShoppingList shoppingList = binding.getShoppingList();
             if (shoppingList != null && shoppingListButtonClickCallback != null) {
                 shoppingListButtonClickCallback.onButtonClick(shoppingList);

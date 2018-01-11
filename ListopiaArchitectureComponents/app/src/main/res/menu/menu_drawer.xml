@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/trash"
+        android:icon="@drawable/ic_trash_gray"
+        android:title="Trash">
+    </item>
+    <item
+        android:id="@+id/help"
+        android:icon="@drawable/ic_help"
+        android:title="Help">
+    </item>
+    <item
+        android:id="@+id/feedback"
+        android:icon="@drawable/ic_feedback"
+        android:title="Send feedback">
+    </item>
+    <item
+        android:id="@+id/recommend"
+        android:icon="@drawable/ic_recommend"
+        android:title="Recommend Listopia">
+    </item>
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings">
+    </item>
+</menu>

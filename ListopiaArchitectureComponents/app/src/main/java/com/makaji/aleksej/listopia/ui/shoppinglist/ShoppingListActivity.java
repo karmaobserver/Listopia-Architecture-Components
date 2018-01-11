@@ -1,20 +1,38 @@
 package com.makaji.aleksej.listopia.ui.shoppinglist;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 
 import com.makaji.aleksej.listopia.R;
+import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.databinding.ActivityShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.base.BaseActivity;
-import android.databinding.DataBindingComponent;
-import android.util.Log;
+import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
 
+import android.databinding.DataBindingComponent;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,7 +41,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
 
-public class ShoppingListActivity extends BaseActivity implements HasSupportFragmentInjector{
+public class ShoppingListActivity extends BaseActivity implements HasSupportFragmentInjector, OnFragmentToolbarInteraction{
 
     @Inject
     ShoppingListRepository shoppingListRepository;
@@ -32,72 +50,143 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     ViewModelProvider.Factory viewModelFactory;
 
     @Inject
+    ShoppingListNavigationController shoppingListNavigationController;
+
+    @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     private ShoppingListViewModel shoppingListViewModel;
 
+    private ActivityShoppingListBinding binding;
 
-    DataBindingComponent dataBindingComponent;
+    private DrawerLayout drawerLayout;
 
+    private NavigationView navigationView;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityShoppingListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_shopping_list);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_shopping_list);
 
         shoppingListViewModel = ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
         binding.setViewModel(shoppingListViewModel);
 
-        /**
-         * ShoppingListCallBack, with events onClick, onLongClick, onButtonClick
-         */
-        ShoppingListAdapter adapter = new ShoppingListAdapter(dataBindingComponent, shopping -> {
-            Timber.d("KLiKNUOOOOOO" );
-        }, shoppingLong -> {
-            Timber.d("LONG          KLiKNUOOOOOO" );
-        }, shoppingButton -> {
-            Timber.d("Button Clicked" );
-        });
+        //Setup toolbar
+        toolbar = (Toolbar) binding.toolbar;
+        setSupportActionBar(toolbar);
+        //enableNavigationDrawerIcon();
+        //setToolbarTitle(R.string.toolbar_shopping_list);
 
-        shoppingListViewModel.getShoppingLists().observe(this, shoppingList -> {
-            Timber.d("Ceo objekat " + shoppingList);
-            if (shoppingList.data == null) {
-                Timber.d("It's NULL");
-            }  else {
-                Timber.d("List Size: " + shoppingList.data.size());
-                //this.adapter = new AutoClearedValue<>(this, adapter);
-                binding.shoppingListRecycler.setAdapter(adapter);
-                adapter.replace(shoppingList.data);
+
+        // Setup drawer view
+        drawerLayout = binding.drawerLayout;
+        navigationView = binding.navigationvView;
+        //To show original color of icons
+        navigationView.setItemIconTintList(null);
+        setupDrawerContent(binding.navigationvView);
+
+        if (savedInstanceState == null) {
+            shoppingListNavigationController.navigateToShoppingList();
+        }
+    }
+
+    @Override
+    public void enableNavigationBackIcon() {
+        toolbar.setNavigationIcon(R.drawable.ic_action_arrow_left);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
+    }
 
-        //FAB-addNewShoppingList
-        shoppingListViewModel.getAddShoppingListEvent().observe(this, movie -> {
-            Timber.d("ShoppingList have been clicked: " + movie);
-            shoppingListViewModel.insertAll();
-        });
+    @Override
+    public void setToolbarTitle(int resId) {
+        toolbar.setTitle(resId);
+    }
 
-
-        //For quick test only
-        //shoppingListViewModel.insertAll();
-        shoppingListViewModel.deleteAll();
-        //shoppingListViewModel.setLogin("1");
-
-        //For quick test only
-        /*shoppingListViewModel.getShoppingLists().observe(this, shoppingList -> {
-            Timber.d("Ceo objekat " + shoppingList);
-            if (shoppingList.data == null) {
-                Timber.d("It's NULL");
-            }  else {
-                Timber.d("List Size: " + shoppingList.data.size());
+    @Override
+    public void enableNavigationDrawerIcon() {
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
             }
-        });*/
+        });
+    }
 
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case R.id.trash:
+                Timber.d("TRASH1 ITEM GOT CLICKED" );
+                break;
+            case R.id.settings:
+                Timber.d("Settings ITEM GOT CLICKED" );
+                break;
+            default:
+                Timber.d("TRASH3 ITEM GOT CLICKED" );
+        }
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        drawerLayout.closeDrawers();
+    }
+
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_shopping_list_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.trash:
+                shoppingListViewModel.deleteAll();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     public DispatchingAndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(navigationView)) {
+            drawerLayout.closeDrawer(navigationView);
+            return;
+        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+            return;
+        }
+        finish();
+    }
+
+
 }
 

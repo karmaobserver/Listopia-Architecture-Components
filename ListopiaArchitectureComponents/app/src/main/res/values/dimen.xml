@@ -2,4 +2,10 @@
 <resources>
     <dimen name="photo_size">64dp</dimen>
     <dimen name="default_margin">8dp</dimen>
+    <!--Keep the ratio 9/16,  height_nav_drawer_header = width_nav_drawer * 9/16-->
+    <dimen name="width_nav_drawer">280dp</dimen>
+    <dimen name="height_nav_drawer_header">156dp</dimen>
+
+    <dimen name="text_input_layout_margins">10dp</dimen>
+
 </resources>

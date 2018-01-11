@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    buildToolsVersion "27.0.1"
     defaultConfig {
         applicationId "com.makaji.aleksej.listopia"
         minSdkVersion 19
@@ -34,10 +35,11 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/values-v21'] } }
 }
 
 dependencies {
-   /* implementation fileTree(dir: 'libs', include: ['*.jar'])
+    /* implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'*/
 
@@ -69,6 +71,9 @@ dependencies {
     //Timber for Log
     implementation deps.timber
 
+    //Glide
+    implementation deps.glide
+
     //Retrofit 2
     implementation deps.retrofit.runtime
     implementation deps.retrofit.gson
@@ -93,6 +98,8 @@ dependencies {
     //Temporary due to unknowen error
     implementation 'com.google.code.gson:gson:2.8.0'
 
+    //Helps to see database of device and sharedpreference data
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
 
 
 }
