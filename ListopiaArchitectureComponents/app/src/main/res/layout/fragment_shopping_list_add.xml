@@ -16,30 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_input_layout_margins"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
             app:counterEnabled="true"
             app:counterMaxLength="@integer/listNameMaxLength"
-            app:errorTextAppearance="@style/ErrorText"
+            app:error="@{viewModel.errorTextListName}"
             app:errorEnabled="true"
-            app:error="@{viewModel.errorTextListName}">
+            app:errorTextAppearance="@style/ErrorText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/text_list_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/fragment_shopping_list_add_list_name"
-            android:text="@={viewModel.textListName}"
-            android:inputType="text" />
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/text_list_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/fragment_shopping_list_add_list_name"
+                android:inputType="text"
+                android:text="@={viewModel.textListName}" />
 
-         </android.support.design.widget.TextInputLayout>
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/create_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:background="@android:color/transparent"
-            android:text="Create"
             android:onClick="@{() -> viewModel.onCreateShoppingListClick()}"
+            android:text="Create"
             android:textColor="@color/accent"
             app:layout_constraintEnd_toEndOf="@+id/text_input_layout_list_name"
             app:layout_constraintTop_toBottomOf="@+id/text_input_layout_list_name" />

@@ -15,6 +15,7 @@ import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.databinding.ActivityShoppingListBinding;
+import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.base.BaseActivity;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
 
@@ -22,6 +23,7 @@ import android.databinding.DataBindingComponent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -42,9 +44,6 @@ import timber.log.Timber;
 
 
 public class ShoppingListActivity extends BaseActivity implements HasSupportFragmentInjector, OnFragmentToolbarInteraction{
-
-    @Inject
-    ShoppingListRepository shoppingListRepository;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -109,6 +108,11 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     }
 
     @Override
+    public void setToolbarTitle(String title) {
+        toolbar.setTitle(title);
+    }
+
+    @Override
     public void enableNavigationDrawerIcon() {
         toolbar.setNavigationIcon(R.drawable.ic_menu_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -137,6 +141,7 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
                 break;
             case R.id.settings:
                 Timber.d("Settings ITEM GOT CLICKED" );
+                shoppingListNavigationController.navigateToSettings();
                 break;
             default:
                 Timber.d("TRASH3 ITEM GOT CLICKED" );
@@ -160,8 +165,11 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.trash:
-                shoppingListViewModel.deleteAll();
+            case R.id.settings:
+                //It has submenu, in case we need logic when settings has been clicked, we write here
+                return true;
+            case R.id.submenu_settings_delete_all:
+                shoppingListViewModel.deleteAllShoppingLists();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -186,7 +194,5 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
         }
         finish();
     }
-
-
 }
 

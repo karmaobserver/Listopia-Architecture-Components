@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -43,7 +44,7 @@ import timber.log.Timber;
  * Created by Aleksej on 1/3/2018.
  */
 
-public class ShoppingListAddFragment extends LifecycleFragment implements Injectable {
+public class ShoppingListAddFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;

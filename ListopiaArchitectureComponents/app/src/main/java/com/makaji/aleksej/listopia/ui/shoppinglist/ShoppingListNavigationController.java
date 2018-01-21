@@ -3,6 +3,7 @@ package com.makaji.aleksej.listopia.ui.shoppinglist;
 import android.support.v4.app.FragmentManager;
 
 import com.makaji.aleksej.listopia.R;
+import com.makaji.aleksej.listopia.ui.common.SettingsFragment;
 
 import javax.inject.Inject;
 
@@ -39,6 +40,21 @@ public class ShoppingListNavigationController {
         fragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(containerId, fragment)
+                .commitAllowingStateLoss();
+    }
+    public void navigateToRenameShoppingList(int id) {
+        ShoppingListRenameFragment fragment = ShoppingListRenameFragment.create(id);
+        String tag = "shopping_list" + "/" + id;
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment, tag)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+    public void navigateToSettings() {
+        SettingsFragment fragment = new SettingsFragment();
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
                 .commitAllowingStateLoss();
     }
 

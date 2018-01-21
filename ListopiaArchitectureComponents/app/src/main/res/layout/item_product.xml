@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="product" type="com.makaji.aleksej.listopia.data.entity.Product"/>
+        <!--<variable name="shoppingListButtonClickCallback" type="com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAdapter.ShoppingListButtonClickCallback"/>-->
+    </data>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="@integer/textMaxLines"
+                android:text="@{product.name}"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Product name" />
+
+            <TextView
+                android:id="@+id/text_notes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@{product.notes}"
+                android:textColor="@color/divider"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_name"
+                app:visibleGone="@{product.notes != null}"
+                tools:text="some notes" />
+
+            <ImageButton
+                android:id="@+id/button_edit_product"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="@drawable/button_selector_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_mode_edit_black" />
+
+            <TextView
+                android:id="@+id/text_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@={product.quantity}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_notes"
+                app:visibleGone="@{product.quantity != 0}"
+                tools:text="quantity" />
+
+            <TextView
+                android:id="@+id/text_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="@{product.unit}"
+                android:textStyle="italic"
+                app:layout_constraintStart_toEndOf="@+id/text_quantity"
+                app:layout_constraintTop_toBottomOf="@+id/text_notes"
+                app:visibleGone="@{product.unit != null}"
+                tools:text="unit" />
+
+            <TextView
+                android:id="@+id/text_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@={product.price}"
+                android:textColor="@color/primary_dark"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
+                app:layout_constraintTop_toBottomOf="@+id/text_notes"
+                tools:text="price" />
+
+            <TextView
+                android:id="@+id/text_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="currency"
+                android:textColor="@color/primary_dark"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/text_price"
+                app:layout_constraintTop_toBottomOf="@+id/text_notes"
+                app:visibleGone="@{product.price != 0}"
+                tools:text="$" />
+
+            <View
+                android:id="@+id/line_for_button"
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:background="@android:color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</layout>

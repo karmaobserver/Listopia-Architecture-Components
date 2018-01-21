@@ -71,6 +71,33 @@ public class ShoppingListRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<ShoppingList>> findShoppingListById(int id) {
+        return new NetworkBoundResource<ShoppingList, ShoppingList>(appExecutors) {
+
+            @Override
+            protected void saveCallResult(@NonNull ShoppingList items) {
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable ShoppingList data) {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ShoppingList> loadFromDb() {
+                Timber.d("LoadFromDB: findShoppingListById");
+                return shoppingListDao.findShoppingListById(id);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<ShoppingList>> createCall() {
+                return null;
+            }
+        }.asLiveData();
+    }
+
     //Temporary Solution
     @SuppressLint("StaticFieldLeak")
     public void insertShoppingList(ShoppingList shoppingList) {
@@ -82,6 +109,46 @@ public class ShoppingListRepository {
             }
         }.execute();
     }
+
+    //Temporary Solution
+    @SuppressLint("StaticFieldLeak")
+    public void updateShoppingList(ShoppingList shoppingList) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                shoppingListDao.updateShoppingList(shoppingList);
+                return null;
+            }
+        }.execute();
+    }
+
+    //Temporary Solution
+    /*@SuppressLint("StaticFieldLeak")
+    public void findShoppingListById(int id) {
+        new AsyncTask<Void, Void, ShoppingList>() {
+            @Override
+            protected ShoppingList doInBackground(Void... voids) {
+                return shoppingListDao.findShoppingListById(id);
+            }
+
+            @Override
+            protected void onPostExecute(ShoppingList result) {
+                nesto(result);
+            }
+        }.execute();
+    }*/
+    /*public ShoppingList findShoppingListById(int id) {
+        final ShoppingList[] shoppingList = {new ShoppingList()};
+        appExecutors.diskIO().execute(() -> {
+            shoppingList[0] = shoppingListDao.findShoppingListById(id);
+        });
+        return shoppingList[0];
+    }*/
+
+
+
+
+    //////////////////////////////////////// For Quick Test Only ////////////////////////////
 
     //For quick test only
     @SuppressLint("StaticFieldLeak")
@@ -107,7 +174,7 @@ public class ShoppingListRepository {
         return shoppingLists;
     }
 
-    public void deleteAll() {
+    public void deleteAllShoppingLists() {
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {

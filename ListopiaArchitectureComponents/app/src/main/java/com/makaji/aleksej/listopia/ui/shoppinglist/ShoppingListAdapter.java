@@ -6,7 +6,10 @@ package com.makaji.aleksej.listopia.ui.shoppinglist;
 
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -16,6 +19,8 @@ import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.common.DataBoundListAdapter;
 
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -44,6 +49,7 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
         ItemShoppingListBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_shopping_list,
                         parent, false, dataBindingComponent);
+
         //binding.setShowFullName(showFullName);
         binding.getRoot().setOnClickListener(view -> {
             ShoppingList shoppingList = binding.getShoppingList();
@@ -58,13 +64,11 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
             }
             return true;
         });
-
-        binding.button.setOnClickListener(view -> {
-            ShoppingList shoppingList = binding.getShoppingList();
-            if (shoppingList != null && shoppingListButtonClickCallback != null) {
-                shoppingListButtonClickCallback.onButtonClick(shoppingList);
-            }
+        //Options Click
+        binding.buttonOptions.setOnClickListener(view -> {
+            setupPopupMenu(view, binding);
         });
+
         return binding;
     }
 
@@ -95,5 +99,39 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
 
     public interface ShoppingListButtonClickCallback {
         void onButtonClick(ShoppingList shoppingList);
+    }
+
+    private void setupPopupMenu(View view, ItemShoppingListBinding binding) {
+        //creating a popup menu
+        PopupMenu popup = new PopupMenu(binding.getRoot().getContext(), view);
+        //inflating menu from xml resource
+        popup.inflate(R.menu.popup_menu_item_shopping_list);
+        //adding click listener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_rename_shopping_list:
+
+                        ShoppingList shoppingList = binding.getShoppingList();
+                        if (shoppingList != null && shoppingListButtonClickCallback != null) {
+                            shoppingListButtonClickCallback.onButtonClick(shoppingList);
+                        }
+                        break;
+                    case R.id.menu_delete_shopping_list:
+                        //handle menu2 click
+                        break;
+                    case R.id.menu_share_shopping_list:
+                        //handle menu3 click
+                        break;
+                    case R.id.menu_copy_shopping_list:
+                        //handle menu4 click
+                        break;
+                }
+                return false;
+            }
+        });
+        //displaying the popup
+        popup.show();
     }
 }

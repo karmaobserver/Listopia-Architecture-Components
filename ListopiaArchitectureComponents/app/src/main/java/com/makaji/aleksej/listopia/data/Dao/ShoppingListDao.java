@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 
@@ -25,6 +26,12 @@ public interface ShoppingListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertShoppingList(ShoppingList shoppingList);
+
+    @Update
+    void updateShoppingList(ShoppingList shoppingList);
+
+    @Query("SELECT * FROM shopping_list WHERE id = :id")
+    LiveData<ShoppingList> findShoppingListById(int id);
 
     @Query("DELETE FROM shopping_list")
     void deleteAll();

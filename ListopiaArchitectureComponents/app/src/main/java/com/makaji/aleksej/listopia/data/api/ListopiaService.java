@@ -2,6 +2,7 @@ package com.makaji.aleksej.listopia.data.api;
 
 import android.arch.lifecycle.LiveData;
 
+import com.makaji.aleksej.listopia.data.entity.Product;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 
 import java.util.List;
@@ -20,4 +21,7 @@ public interface ListopiaService {
 
     @GET("api/shoppingLists")
     LiveData<ApiResponse<List<ShoppingList>>> getShoppingLists();
+
+    @GET("api/products")
+    LiveData<ApiResponse<List<Product>>> getProductsByShoppingListId();
 }

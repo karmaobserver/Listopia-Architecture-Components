@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_rename_shopping_list"
+        android:title="@string/menu_rename_shopping_list">
+    </item>
+    <item
+        android:id="@+id/menu_delete_shopping_list"
+        android:title="@string/menu_delete_shopping_list">
+    </item>
+    <item
+        android:id="@+id/menu_share_shopping_list"
+        android:title="@string/menu_share_shopping_list">
+    </item>
+    <item
+        android:id="@+id/menu_copy_shopping_list"
+        android:title="@string/menu_copy_shopping_list">
+    </item>
+</menu>

@@ -1,8 +1,9 @@
 package com.makaji.aleksej.listopia.di.module;
 
-import com.makaji.aleksej.listopia.ui.shoppinglist.MyFragment;
+import com.makaji.aleksej.listopia.ui.product.ProductFragment;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAddFragment;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListFragment;
+import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListRenameFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -12,14 +13,15 @@ import dagger.android.ContributesAndroidInjector;
  */
 
 @Module
-public abstract class FragmentBuildersModule {
-    @ContributesAndroidInjector
-    abstract MyFragment contributeMyFragment();
+public abstract class FragmentBuildersShoppingListModule {
 
     @ContributesAndroidInjector
     abstract ShoppingListAddFragment shoppingListAddFragment();
 
     @ContributesAndroidInjector
     abstract ShoppingListFragment shoppingListFragment();
+
+    @ContributesAndroidInjector
+    abstract ShoppingListRenameFragment shoppingListRenameFragment();
 
 }

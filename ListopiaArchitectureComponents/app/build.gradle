@@ -101,5 +101,8 @@ dependencies {
     //Helps to see database of device and sharedpreference data
     debugCompile 'com.amitshekhar.android:debug-db:1.0.1'
 
+    //For settings
+    implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
+
 
 }

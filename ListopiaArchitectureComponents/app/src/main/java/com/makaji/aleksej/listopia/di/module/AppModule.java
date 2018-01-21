@@ -2,8 +2,11 @@ package com.makaji.aleksej.listopia.di.module;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
+import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
 
 import com.makaji.aleksej.listopia.data.api.ListopiaService;
+import com.makaji.aleksej.listopia.data.dao.ProductDao;
 import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.data.database.ListopiaDb;
 import com.makaji.aleksej.listopia.util.LiveDataCallAdapterFactory;
@@ -37,11 +40,27 @@ class AppModule {
     @Provides
     ListopiaDb provideDb(Application app) {
         return Room.databaseBuilder(app, ListopiaDb.class,"listopia.db").build();
+        //For destroying database and creating new, also I need to change version in ListopiaDB
+       // return Room.databaseBuilder(app, ListopiaDb.class, "listopia.db").fallbackToDestructiveMigration().build();
     }
 
-    @Singleton @Provides
+    @Singleton
+    @Provides
     ShoppingListDao provideShoppingListDao(ListopiaDb db) {
         return db.shoppingListDao();
     }
+
+    @Singleton
+    @Provides
+    ProductDao provideProductDao(ListopiaDb db) {
+        return db.productDao();
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences providesSharedPreferences(Application application) {
+        return PreferenceManager.getDefaultSharedPreferences(application);
+    }
+
 
 }
