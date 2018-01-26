@@ -23,20 +23,14 @@ public class ListopiaApp extends Application implements HasActivityInjector {
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 
-    private static Context mContext;
-
     @Override
     public void onCreate() {
         super.onCreate();
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        mContext = this;
-        AppInjector.init(this);
-    }
 
-    public static Context getContext(){
-        return mContext;
+        AppInjector.init(this);
     }
 
     @Override

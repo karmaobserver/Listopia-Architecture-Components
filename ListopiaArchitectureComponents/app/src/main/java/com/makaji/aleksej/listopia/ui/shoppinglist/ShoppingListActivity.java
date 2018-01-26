@@ -15,6 +15,7 @@ import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.databinding.ActivityShoppingListBinding;
+import com.makaji.aleksej.listopia.databinding.HeaderNavigationBinding;
 import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.base.BaseActivity;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
@@ -75,20 +76,17 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
         //Setup toolbar
         toolbar = (Toolbar) binding.toolbar;
         setSupportActionBar(toolbar);
-        //enableNavigationDrawerIcon();
-        //setToolbarTitle(R.string.toolbar_shopping_list);
-
 
         // Setup drawer view
-        drawerLayout = binding.drawerLayout;
-        navigationView = binding.navigationvView;
-        //To show original color of icons
-        navigationView.setItemIconTintList(null);
-        setupDrawerContent(binding.navigationvView);
+        setupDrawerContent();
+
+
 
         if (savedInstanceState == null) {
             shoppingListNavigationController.navigateToShoppingList();
         }
+
+
     }
 
     @Override
@@ -123,7 +121,18 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
         });
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
+    private void setupDrawerContent() {
+        //navigationView.getMenu().getItem(R.id.sign_out).setVisible(false);
+
+        drawerLayout = binding.drawerLayout;
+        navigationView = binding.navigationvView;
+        HeaderNavigationBinding headerBinding = HeaderNavigationBinding.bind(navigationView.getHeaderView(0));
+        //test only
+        headerBinding.setIsLogged(true);
+
+        //To show original color of icons
+        navigationView.setItemIconTintList(null);
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -132,6 +141,12 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
                         return true;
                     }
                 });
+
+        headerBinding.signIn.setOnClickListener(view -> {
+            shoppingListNavigationController.navigateToSignIn();
+            // Close the navigation drawer
+            drawerLayout.closeDrawers();
+        });
     }
 
     public void selectDrawerItem(MenuItem menuItem) {

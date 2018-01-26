@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -43,6 +44,9 @@ public class ProductAddFragment extends Fragment implements Injectable {
 
     @Inject
     SharedPreferences sharedPreferences;
+
+    @Inject
+    Resources resources;
 
     private static final String SHOPPING_LIST_ID = "shopping_list_id";
 
@@ -105,7 +109,8 @@ public class ProductAddFragment extends Fragment implements Injectable {
             productViewModel.setId(id);
         }
 
-        String currency = sharedPreferences.getString(getContext().getString(R.string.key_currency), "");
+        //Set currency from sharedPreferences
+        String currency = sharedPreferences.getString(resources.getString(R.string.key_currency), "");
         binding.get().textCurrency.setText(currency);
 
         //Automatically focuse edit text and show keyboard
@@ -127,7 +132,6 @@ public class ProductAddFragment extends Fragment implements Injectable {
             //shoppingListNavigationController.navigateToShoppingList();
             productNavigationController.popBackStackMethod();
         });
-
     }
 
     @Override

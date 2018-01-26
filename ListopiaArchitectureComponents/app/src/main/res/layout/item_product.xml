@@ -42,7 +42,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_name"
-                app:visibleGone="@{product.notes != null}"
+                app:visibilityGone="@{product.notes == null}"
                 tools:text="some notes" />
 
             <ImageButton
@@ -63,7 +63,7 @@
                 android:text="@={product.quantity}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_notes"
-                app:visibleGone="@{product.quantity != 0}"
+                app:visibilityGone="@{product.quantity == 0}"
                 tools:text="quantity" />
 
             <TextView
@@ -75,7 +75,7 @@
                 android:textStyle="italic"
                 app:layout_constraintStart_toEndOf="@+id/text_quantity"
                 app:layout_constraintTop_toBottomOf="@+id/text_notes"
-                app:visibleGone="@{product.unit != null}"
+                app:visibilityGone="@{product.unit == null}"
                 tools:text="unit" />
 
             <TextView
@@ -99,7 +99,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/text_price"
                 app:layout_constraintTop_toBottomOf="@+id/text_notes"
-                app:visibleGone="@{product.price != 0}"
+                app:visibilityGone="@{product.price == 0}"
                 tools:text="$" />
 
             <View

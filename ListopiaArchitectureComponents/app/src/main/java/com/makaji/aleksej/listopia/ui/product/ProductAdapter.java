@@ -1,6 +1,8 @@
 package com.makaji.aleksej.listopia.ui.product;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.preference.PreferenceManager;
@@ -31,6 +33,9 @@ public class ProductAdapter extends DataBoundListAdapter<Product, ItemProductBin
     private final ProductClickCallback productClickCallback;
     private final ProductLongClickCallback productLongClickCallback;
     private final ProductEditClickCallback productEditClickCallback;
+
+    private SharedPreferences sharedPreferences;
+    private Resources resources;
 
     public ProductAdapter(DataBindingComponent dataBindingComponent,
                           ProductClickCallback productClickCallback, ProductLongClickCallback productLongClickCallback, ProductEditClickCallback productEditClickCallback) {
@@ -68,8 +73,10 @@ public class ProductAdapter extends DataBoundListAdapter<Product, ItemProductBin
         });
 
         //Set currency text from shared preferences
-        String currencyKey = binding.getRoot().getContext().getString(R.string.key_currency);
-        String currency = PreferenceManager.getDefaultSharedPreferences(binding.getRoot().getContext()).getString(currencyKey, "defaultStringIfNothingFound");
+        resources = binding.getRoot().getContext().getResources();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(binding.getRoot().getContext());
+        String resCurrency = resources.getString(R.string.key_currency);
+        String currency = sharedPreferences.getString(resCurrency, "defaultStringIfNothingFound");
         Timber.d("currency is: " + currency);
         binding.textCurrency.setText(currency);
 

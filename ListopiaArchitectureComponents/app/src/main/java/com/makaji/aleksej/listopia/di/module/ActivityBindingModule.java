@@ -12,11 +12,11 @@ import dagger.android.ContributesAndroidInjector;
 
 
 @Module
-public abstract class ActivityBuildersModule {
+public abstract class ActivityBindingModule {
 
-    @ContributesAndroidInjector(modules = FragmentBuildersShoppingListModule.class)
+    @ContributesAndroidInjector(modules = ShoppingListModule.class)
     abstract ShoppingListActivity contributeShoppingListActivity();
 
-    @ContributesAndroidInjector(modules = FragmentBuildersProductModule.class)
+    @ContributesAndroidInjector(modules = ProductModule.class)
     abstract ProductActivity contributeProductActivity();
 }

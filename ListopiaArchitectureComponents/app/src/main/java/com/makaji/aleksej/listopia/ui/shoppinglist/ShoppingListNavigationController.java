@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.ui.common.SettingsFragment;
+import com.makaji.aleksej.listopia.ui.login.LoginFragment;
 
 import javax.inject.Inject;
 
@@ -52,6 +53,14 @@ public class ShoppingListNavigationController {
     }
     public void navigateToSettings() {
         SettingsFragment fragment = new SettingsFragment();
+        fragmentManager.beginTransaction()
+                .replace(containerId, fragment)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+
+    public void navigateToSignIn() {
+        LoginFragment fragment = new LoginFragment();
         fragmentManager.beginTransaction()
                 .replace(containerId, fragment)
                 .addToBackStack(null)

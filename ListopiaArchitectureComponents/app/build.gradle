@@ -104,5 +104,9 @@ dependencies {
     //For settings
     implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
 
+    //For google sign in
+    implementation 'com.google.android.gms:play-services-auth:11.8.0'
+    implementation 'com.google.android.gms:play-services-identity:11.8.0'
+
 
 }

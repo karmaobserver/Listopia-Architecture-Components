@@ -8,19 +8,18 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 
 /**
- * Created by Aleksej on 1/14/2018.
+ * Created by Aleksej on 1/25/2018.
  */
-
 @Module
-public abstract class FragmentBuildersProductModule {
+public abstract class ProductModule {
 
     @ContributesAndroidInjector
-    abstract ProductFragment productFragment();
+    abstract ProductFragment contributeProductFragment();
 
     @ContributesAndroidInjector
-    abstract ProductAddFragment productAddFragment();
+    abstract ProductAddFragment contributeProductAddFragment();
 
     @ContributesAndroidInjector
-    abstract ProductRenameFragment productRenameFragment();
+    abstract ProductRenameFragment contributeProductRenameFragment();
 
 }

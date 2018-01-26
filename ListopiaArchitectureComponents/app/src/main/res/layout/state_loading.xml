@@ -7,7 +7,7 @@
         <variable name="resource" type="Resource"/>
     </data>
     <LinearLayout android:orientation="vertical"
-        app:visibleGone="@{resource.status == Status.LOADING}"
+        app:visibilityGone="@{resource.status != Status.LOADING}"
         android:layout_width="wrap_content"
         android:gravity="center"
         android:padding="@dimen/default_margin"

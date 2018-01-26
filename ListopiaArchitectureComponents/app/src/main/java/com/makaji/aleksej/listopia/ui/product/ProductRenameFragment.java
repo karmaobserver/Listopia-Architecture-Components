@@ -3,6 +3,8 @@ package com.makaji.aleksej.listopia.ui.product;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -43,6 +45,12 @@ public class ProductRenameFragment extends Fragment implements Injectable {
 
     @Inject
     ProductNavigationController productNavigationController;
+
+    @Inject
+    SharedPreferences sharedPreferences;
+
+    @Inject
+    Resources resources;
 
     DataBindingComponent dataBindingComponent = new FragmentDataBindingComponent(this);
 
@@ -95,6 +103,10 @@ public class ProductRenameFragment extends Fragment implements Injectable {
         super.onActivityCreated(savedInstanceState);
         productViewModel = ViewModelProviders.of(this, viewModelFactory).get(ProductViewModel.class);
         binding.get().setViewModel(productViewModel);
+
+        //Set currency from sharedPreferences
+        String currency = sharedPreferences.getString(resources.getString(R.string.key_currency), "");
+        binding.get().textCurrency.setText(currency);
 
         //Automatically focuse edit text and show keyboard
         binding.get().editName.requestFocus();

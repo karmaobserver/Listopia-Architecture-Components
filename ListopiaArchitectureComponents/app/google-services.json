@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "458989202772",
+    "project_id": "firebase-listopia"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458989202772:android:13b366943ff433d1",
+        "android_client_info": {
+          "package_name": "com.makaji.aleksej.listopia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458989202772-511uej7gsois8gktfs3fiup9j0eero9k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.makaji.aleksej.listopia",
+            "certificate_hash": "47fa9c0a93912ca6e142853f79dee2a8a404dba5"
+          }
+        },
+        {
+          "client_id": "458989202772-7ev1n2e4jc8p8soc1d2ijhju9cofm4fr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5WeBW4fkUSXPkpI3hJtoeWyWit1O74WI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,9 +15,9 @@ import timber.log.Timber;
  * Data Binding adapters specific to the app.
  */
 public class BindingAdapters {
-    @BindingAdapter("visibleGone")
-    public static void showHide(View view, boolean show) {
-        view.setVisibility(show ? View.VISIBLE : View.GONE);
+    @BindingAdapter("visibilityGone")
+    public static void hideShow(View view, boolean hide) {
+        view.setVisibility(hide ? View.GONE : View.VISIBLE);
     }
     //For float value in edit text
     @BindingAdapter("android:text")

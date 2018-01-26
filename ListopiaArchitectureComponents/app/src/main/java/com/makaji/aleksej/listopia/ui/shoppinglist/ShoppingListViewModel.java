@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
+import android.content.Context;
 
 import com.makaji.aleksej.listopia.ListopiaApp;
 import com.makaji.aleksej.listopia.R;
@@ -38,6 +39,9 @@ public class ShoppingListViewModel extends ViewModel {
 
     @Inject
     ShoppingListRepository shoppingListRepository;
+
+    @Inject
+    Context context;
 
 
     @Inject
@@ -121,7 +125,7 @@ public class ShoppingListViewModel extends ViewModel {
         if ((textListName.getValue() == null) || (textListName.getValue().length() == 0)) {
             errorTextListName.setValue("List name can't be empty");
             isValid = false;
-        } else if (textListName.getValue().length() > ListopiaApp.getContext().getResources().getInteger(R.integer.listNameMaxLength)) {
+        } else if (textListName.getValue().length() > context.getResources().getInteger(R.integer.listNameMaxLength)) {
             errorTextListName.setValue("List name need to be shorter");
             isValid = false;
         } else {
@@ -136,7 +140,7 @@ public class ShoppingListViewModel extends ViewModel {
         if ((listName == null) || (listName.length() == 0)) {
             errorTextListName.setValue("List name can't be empty");
             isValid = false;
-        } else if (listName.length() > ListopiaApp.getContext().getResources().getInteger(R.integer.listNameMaxLength)) {
+        } else if (listName.length() > context.getResources().getInteger(R.integer.listNameMaxLength)) {
             errorTextListName.setValue("List name need to be shorter");
             isValid = false;
         } else {
