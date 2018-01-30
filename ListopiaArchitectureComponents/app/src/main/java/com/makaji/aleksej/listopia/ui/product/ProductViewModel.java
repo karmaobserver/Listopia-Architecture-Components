@@ -149,4 +149,8 @@ public class ProductViewModel extends ViewModel {
     public LiveData<Void> getRenameProductClick() {
         return renameProductClick;
     }
+
+    public void setChecked(int id, boolean isChecked) {
+        productRepository.updateChecked(id, isChecked);
+    }
 }

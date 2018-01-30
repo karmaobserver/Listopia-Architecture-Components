@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.makaji.aleksej.listopia.R;
+import com.makaji.aleksej.listopia.data.entity.Product;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
+import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
 import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.common.DataBoundListAdapter;
 
@@ -28,21 +30,19 @@ import timber.log.Timber;
 /**
  * A RecyclerView adapter for {@link ShoppingList} class.
  */
-public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, ItemShoppingListBinding> {
+public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingListWithProducts, ItemShoppingListBinding> {
     private final DataBindingComponent dataBindingComponent;
     private final ShoppingListClickCallback shoppingListClickCallback;
     private final ShoppingListLongClickCallback shoppingListLongClickCallback;
-    private final ShoppingListButtonClickCallback shoppingListButtonClickCallback;
+    private final ShoppingListOptionsClickCallback shoppingListOptionsClickCallback;
 
     public ShoppingListAdapter(DataBindingComponent dataBindingComponent,
-                               ShoppingListClickCallback shoppingListClickCallback, ShoppingListLongClickCallback shoppingListLongClickCallback, ShoppingListButtonClickCallback shoppingListButtonClickCallback) {
+                               ShoppingListClickCallback shoppingListClickCallback, ShoppingListLongClickCallback shoppingListLongClickCallback, ShoppingListOptionsClickCallback shoppingListOptionsClickCallback) {
         this.dataBindingComponent = dataBindingComponent;
         this.shoppingListClickCallback = shoppingListClickCallback;
         this.shoppingListLongClickCallback = shoppingListLongClickCallback;
-        this.shoppingListButtonClickCallback = shoppingListButtonClickCallback;
+        this.shoppingListOptionsClickCallback = shoppingListOptionsClickCallback;
     }
-
-
 
     @Override
     protected ItemShoppingListBinding createBinding(ViewGroup parent) {
@@ -52,13 +52,13 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
 
         //binding.setShowFullName(showFullName);
         binding.getRoot().setOnClickListener(view -> {
-            ShoppingList shoppingList = binding.getShoppingList();
+            ShoppingListWithProducts shoppingList = binding.getShoppingListWithProducts();
             if (shoppingList != null && shoppingListClickCallback != null) {
                 shoppingListClickCallback.onClick(shoppingList);
             }
         });
         binding.getRoot().setOnLongClickListener(view -> {
-            ShoppingList shoppingList = binding.getShoppingList();
+            ShoppingListWithProducts shoppingList = binding.getShoppingListWithProducts();
             if (shoppingList != null && shoppingListLongClickCallback != null) {
                 shoppingListLongClickCallback.onLongClick(shoppingList);
             }
@@ -66,42 +66,55 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
         });
         //Options Click
         binding.buttonOptions.setOnClickListener(view -> {
-            setupPopupMenu(view, binding);
+            //setupPopupMenu(view, binding);
+            ShoppingListWithProducts shoppingList = binding.getShoppingListWithProducts();
+            if (shoppingList != null && shoppingListOptionsClickCallback != null) {
+                shoppingListOptionsClickCallback.onOptionsClick(shoppingList, view);
+            }
         });
 
         return binding;
     }
 
     @Override
-    protected void bind(ItemShoppingListBinding binding, ShoppingList item) {
-        binding.setShoppingList(item);
+    protected void bind(ItemShoppingListBinding binding, ShoppingListWithProducts item) {
+        binding.setShoppingListWithProducts(item);
+        //setup text progress
+        int numberOfCheckedItems = countCheckedProducts(item);
+        binding.textMaxProducts.setText("" + item.products.size());
+        binding.textCheckedProducts.setText("" + numberOfCheckedItems);
+        //setup progressBar
+        binding.progressBar.setMax(item.products.size());
+        binding.progressBar.setProgress(numberOfCheckedItems);
     }
 
     @Override
-    protected boolean areItemsTheSame(ShoppingList oldItem, ShoppingList newItem) {
-        return oldItem.getId() == newItem.getId();
+    protected boolean areItemsTheSame(ShoppingListWithProducts oldItem, ShoppingListWithProducts newItem) {
+        return oldItem.shoppingList.getId() == newItem.shoppingList.getId();
         //Objects.equals(oldItem.getId(), newItem.getId());
     }
 
     @Override
-    protected boolean areContentsTheSame(ShoppingList oldItem, ShoppingList newItem) {
-        return Objects.equals(oldItem.getName(), newItem.getName());
+    protected boolean areContentsTheSame(ShoppingListWithProducts oldItem, ShoppingListWithProducts newItem) {
+        return Objects.equals(oldItem.shoppingList.getName(), newItem.shoppingList.getName()) &&
+                Objects.equals(oldItem.products, newItem.products);
 
     }
 
     public interface ShoppingListClickCallback {
-        void onClick(ShoppingList shoppingList);
+        void onClick(ShoppingListWithProducts shoppingList);
     }
 
     public interface ShoppingListLongClickCallback {
-        void onLongClick(ShoppingList shoppingList);
+        void onLongClick(ShoppingListWithProducts shoppingList);
     }
 
-    public interface ShoppingListButtonClickCallback {
-        void onButtonClick(ShoppingList shoppingList);
+    public interface ShoppingListOptionsClickCallback {
+        void onOptionsClick(ShoppingListWithProducts shoppingList, View view);
     }
 
-    private void setupPopupMenu(View view, ItemShoppingListBinding binding) {
+    //Logic has been transfered to fragment
+   /* private void setupPopupMenu(View view, ItemShoppingListBinding binding) {
         //creating a popup menu
         PopupMenu popup = new PopupMenu(binding.getRoot().getContext(), view);
         //inflating menu from xml resource
@@ -113,7 +126,7 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
                 switch (item.getItemId()) {
                     case R.id.menu_rename_shopping_list:
 
-                        ShoppingList shoppingList = binding.getShoppingList();
+                        ShoppingListWithProducts shoppingList = binding.getShoppingListWithProducts();
                         if (shoppingList != null && shoppingListButtonClickCallback != null) {
                             shoppingListButtonClickCallback.onButtonClick(shoppingList);
                         }
@@ -133,5 +146,19 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingList, Item
         });
         //displaying the popup
         popup.show();
+    }*/
+
+    /**
+     * Count checked items in a shoppingList
+     * @param binding
+     * @return number of checked items
+     */
+    public int countCheckedProducts(ShoppingListWithProducts binding) {
+        int productNumber = 0;
+        for (Product product : binding.products) {
+            if (product.getChecked())
+                productNumber++;
+        }
+        return productNumber;
     }
 }

@@ -13,6 +13,7 @@ import com.makaji.aleksej.listopia.data.api.ListopiaService;
 import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.AppExecutors;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
+import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
 import com.makaji.aleksej.listopia.data.vo.Resource;
 
 import java.util.ArrayList;
@@ -98,6 +99,40 @@ public class ShoppingListRepository {
         }.asLiveData();
     }
 
+    public LiveData<Resource<List<ShoppingListWithProducts>>> loadShoppingListsWithProducts() {
+        return new NetworkBoundResource<List<ShoppingListWithProducts>, List<ShoppingListWithProducts>>(appExecutors) {
+
+            @Override
+            protected void saveCallResult(@NonNull List<ShoppingListWithProducts> items) {
+                Timber.d("SaveCall itemSize: " + items.size());
+                //shoppingListDao.insertAll(items);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<ShoppingListWithProducts> data) {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<ShoppingListWithProducts>> loadFromDb() {
+                Timber.d("LoadFromDB: ");
+                return shoppingListDao.loadShoppingListsWithProducts();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<ShoppingListWithProducts>>> createCall() {
+               /* Timber.d("Making call:");
+                LiveData<ApiResponse<List<ShoppingList>>> result = listopiaService.getShoppingLists();
+                Timber.d("Result is: " + result);
+                return result;*/
+                //return listopiaService.getShoppingLists();
+                return null;
+            }
+        }.asLiveData();
+    }
+
     //Temporary Solution
     @SuppressLint("StaticFieldLeak")
     public void insertShoppingList(ShoppingList shoppingList) {
@@ -117,6 +152,18 @@ public class ShoppingListRepository {
             @Override
             protected Void doInBackground(Void... voids) {
                 shoppingListDao.updateShoppingList(shoppingList);
+                return null;
+            }
+        }.execute();
+    }
+
+    //Temporary Solution
+    @SuppressLint("StaticFieldLeak")
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                shoppingListDao.deleteShoppingList(shoppingList);
                 return null;
             }
         }.execute();

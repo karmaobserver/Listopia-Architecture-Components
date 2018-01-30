@@ -105,7 +105,7 @@ public class ProductActivity extends BaseActivity implements HasSupportFragmentI
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_shopping_list_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_product_activity, menu);
         return true;
     }
 

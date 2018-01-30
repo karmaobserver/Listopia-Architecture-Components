@@ -36,9 +36,9 @@ public class Product {
     private String notes;
 
     @SerializedName("is_checked")
-    private Boolean isChecked;
+    private boolean isChecked;
 
-    public Product(int id, int shoppingListId, String name, Float quantity, String unit, Float price, String notes, Boolean isChecked) {
+    public Product(int id, int shoppingListId, String name, Float quantity, String unit, Float price, String notes, boolean isChecked) {
         this.id = id;
         this.shoppingListId = shoppingListId;
         this.name = name;
@@ -109,11 +109,11 @@ public class Product {
         this.shoppingListId = shoppingListId;
     }
 
-    public Boolean getChecked() {
+    public boolean getChecked() {
         return isChecked;
     }
 
-    public void setChecked(Boolean checked) {
+    public void setChecked(boolean checked) {
         isChecked = checked;
     }
 }

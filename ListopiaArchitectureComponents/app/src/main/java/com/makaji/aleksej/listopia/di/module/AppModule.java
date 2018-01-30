@@ -58,7 +58,7 @@ class AppModule {
     ListopiaDb provideDb(Application application) {
         return Room.databaseBuilder(application, ListopiaDb.class,"listopia.db").build();
         //For destroying database and creating new, also I need to change version in ListopiaDB
-        //return Room.databaseBuilder(app, ListopiaDb.class, "listopia.db").fallbackToDestructiveMigration().build();
+        //return Room.databaseBuilder(application, ListopiaDb.class, "listopia.db").fallbackToDestructiveMigration().build();
     }
 
     @Singleton

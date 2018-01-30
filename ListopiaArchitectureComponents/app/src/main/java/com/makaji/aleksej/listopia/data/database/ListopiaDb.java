@@ -26,7 +26,7 @@ import java.util.Random;
 /**
  * Main database description.
  */
-@Database(entities = {ShoppingList.class, Product.class}, version = 5)
+@Database(entities = {ShoppingList.class, Product.class}, version = 6)
 public abstract class ListopiaDb extends RoomDatabase {
 
     abstract public ShoppingListDao shoppingListDao();

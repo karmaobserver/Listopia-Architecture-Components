@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Paint;
 import android.support.v7.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -56,6 +57,12 @@ public class ProductAdapter extends DataBoundListAdapter<Product, ItemProductBin
         binding.getRoot().setOnClickListener(view -> {
             Product product = binding.getProduct();
             if (product != null && productClickCallback != null) {
+                Timber.d("ProductAdapter getCheked" + product.getChecked());
+                if (!product.getChecked())
+                    markItemAsChecked(binding);
+                else
+                    markItemAsUnchecked(binding);
+
                 productClickCallback.onClick(product);
             }
         });
@@ -100,7 +107,8 @@ public class ProductAdapter extends DataBoundListAdapter<Product, ItemProductBin
                oldItem.getQuantity() == newItem.getQuantity() &&
                 Objects.equals(oldItem.getUnit(), newItem.getUnit()) &&
                oldItem.getPrice() == newItem.getPrice() &&
-                Objects.equals(oldItem.getNotes(), newItem.getNotes());
+                Objects.equals(oldItem.getNotes(), newItem.getNotes()) &&
+                oldItem.getChecked() == newItem.getChecked();
                 //TODO: add what has left to be added
 
 
@@ -116,5 +124,45 @@ public class ProductAdapter extends DataBoundListAdapter<Product, ItemProductBin
 
     public interface ProductEditClickCallback {
         void onProductEditClick(Product product);
+    }
+
+    /**Instant update UI, mark item as checked
+     *
+     * @param binding
+     */
+    public void markItemAsChecked(ItemProductBinding binding) {
+        binding.textName.setPaintFlags(binding.textName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textQuantity.setPaintFlags(binding.textQuantity.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textUnit.setPaintFlags(binding.textUnit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textNotes.setPaintFlags(binding.textName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textCurrency.setPaintFlags(binding.textCurrency.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textPrice.setPaintFlags(binding.textPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        binding.textName.setEnabled(false);
+        binding.textQuantity.setEnabled(false);
+        binding.textUnit.setEnabled(false);
+        binding.textNotes.setEnabled(false);
+        binding.textQuantity.setEnabled(false);
+        //Change it
+        binding.textCurrency.setEnabled(false);
+        binding.textPrice.setEnabled(false);
+}
+
+    public void markItemAsUnchecked(ItemProductBinding binding) {
+        binding.textName.setPaintFlags(binding.textName.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textQuantity.setPaintFlags(binding.textQuantity.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textUnit.setPaintFlags(binding.textUnit.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textNotes.setPaintFlags(binding.textNotes.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textCurrency.setPaintFlags(binding.textCurrency.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textPrice.setPaintFlags(binding.textPrice.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+        binding.textName.setEnabled(true);
+        binding.textQuantity.setEnabled(true);
+        binding.textUnit.setEnabled(true);
+        binding.textNotes.setEnabled(true);
+        binding.textQuantity.setEnabled(true);
+        //Change it
+        binding.textCurrency.setEnabled(true);
+        binding.textPrice.setEnabled(true);
+
+
     }
 }

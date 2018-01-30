@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.binding.FragmentDataBindingComponent;
+import com.makaji.aleksej.listopia.data.entity.Product;
 import com.makaji.aleksej.listopia.databinding.FragmentProductBinding;
 import com.makaji.aleksej.listopia.di.module.Injectable;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
@@ -22,6 +23,8 @@ import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAdapter;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListNavigationController;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListViewModel;
 import com.makaji.aleksej.listopia.util.AutoClearedValue;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -133,6 +136,12 @@ public class ProductFragment extends LifecycleFragment implements Injectable {
     private void setProductCallBacks() {
         ProductAdapter productAdapter = new ProductAdapter(dataBindingComponent, productOnClick -> {
             Timber.d("KLiKNUOOOOOO" );
+            Timber.d("isChecked pre" + productOnClick.getChecked());
+            if (productOnClick.getChecked())
+                productViewModel.setChecked(productOnClick.getId(), false);
+            else {
+                productViewModel.setChecked(productOnClick.getId(), true);
+            }
 
         }, productOnLongClick -> {
             Timber.d("LONG          KLiKNUOOOOOO" );
@@ -146,15 +155,17 @@ public class ProductFragment extends LifecycleFragment implements Injectable {
     }
     private void subscribeToUi(ProductViewModel productViewModel) {
         // Update the list when the data changes
-        productViewModel.getProducts().observe(this, product -> {
-            binding.get().setResource(product);
+        productViewModel.getProducts().observe(this, products -> {
+            binding.get().setResource(products);
             //binding.executePendingBindings();
-            Timber.d("Ceo objekat " + product);
-            if (product.data == null) {
+            Timber.d("Ceo objekat " + products);
+            if (products.data == null) {
                 Timber.d("It's NULL");
             } else {
-                Timber.d("List Size: " + product.data.size());
-                adapter.get().replace(product.data);
+                Timber.d("List Size: " + products.data.size());
+                adapter.get().replace(products.data);
+                binding.get().textListTotal.setText("" + calculateListTotal(products.data));
+                binding.get().textCartTotal.setText("" + calculateCartTotal(products.data));
             }
         });
     }
@@ -164,5 +175,32 @@ public class ProductFragment extends LifecycleFragment implements Injectable {
         productViewModel.getAddProductClick().observe(this, fabButton -> {
             productNavigationController.navigateToAddProduct(id);
         });
+    }
+
+    /**
+     * Calculate total value of list
+     * @param products
+     * @return
+     */
+    private double calculateListTotal(List<Product> products) {
+        double listTotal = 0;
+        for (Product product : products) {
+            listTotal += product.getPrice()*product.getQuantity();
+        }
+        return listTotal;
+    }
+
+    /**
+     * Calculate total value of cart
+     * @param products
+     * @return
+     */
+    private double calculateCartTotal(List<Product> products) {
+        double cartTotal = 0;
+        for (Product product : products) {
+            if (product.getChecked())
+                cartTotal += product.getPrice()*product.getQuantity();
+        }
+        return cartTotal;
     }
 }

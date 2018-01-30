@@ -9,6 +9,7 @@ import android.content.Context;
 import com.makaji.aleksej.listopia.ListopiaApp;
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
+import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
 import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.data.vo.Resource;
 import com.makaji.aleksej.listopia.util.AbsentLiveData;
@@ -29,6 +30,7 @@ public class ShoppingListViewModel extends ViewModel {
 
     private final LiveData<Resource<List<ShoppingList>>> shoppingLists;
     private LiveData<Resource<ShoppingList>> shoppingList;
+    private final LiveData<Resource<List<ShoppingListWithProducts>>> shoppingListsWithProducts;
     final MutableLiveData<Integer> shoppingListId = new MutableLiveData<>();
     private final SingleLiveData<Void> addShoppingListClick = new SingleLiveData<>();
     private final SingleLiveData<Void> createShoppingListClick = new SingleLiveData<>();
@@ -55,6 +57,8 @@ public class ShoppingListViewModel extends ViewModel {
                 return shoppingListRepository.findShoppingListById(id);
             }
         });
+
+        shoppingListsWithProducts = shoppingListRepository.loadShoppingListsWithProducts();
     }
 
     public LiveData<Resource<List<ShoppingList>>> getShoppingLists() {
@@ -63,6 +67,10 @@ public class ShoppingListViewModel extends ViewModel {
 
     public LiveData<Resource<ShoppingList>> getShoppingList() {
         return shoppingList;
+    }
+
+    public LiveData<Resource<List<ShoppingListWithProducts>>> getShoppingListsWithProducts() {
+        return shoppingListsWithProducts;
     }
 
     //Set id to get shoppingList (call findShoppingListById)
@@ -156,6 +164,10 @@ public class ShoppingListViewModel extends ViewModel {
 
     public void deleteAllShoppingLists() {
         shoppingListRepository.deleteAllShoppingLists();
+    }
+
+    public void deleteShoppingList(ShoppingList shoppingList) {
+        shoppingListRepository.deleteShoppingList(shoppingList);
     }
 
     /////////////////////////////// Quick TEST ONLY //////////////////////

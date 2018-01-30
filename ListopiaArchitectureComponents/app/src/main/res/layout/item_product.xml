@@ -9,7 +9,8 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:foreground="?android:attr/selectableItemBackground">
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,6 +24,7 @@
                 android:ellipsize="end"
                 android:maxLines="@integer/textMaxLines"
                 android:text="@{product.name}"
+                app:strikeThrough="@{product.checked}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
@@ -37,6 +39,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="@{product.notes}"
+                app:strikeThrough="@{product.checked}"
                 android:textColor="@color/divider"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
@@ -61,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="@={product.quantity}"
+                app:strikeThrough="@{product.checked}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_notes"
                 app:visibilityGone="@{product.quantity == 0}"
@@ -72,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:text="@{product.unit}"
+                app:strikeThrough="@{product.checked}"
                 android:textStyle="italic"
                 app:layout_constraintStart_toEndOf="@+id/text_quantity"
                 app:layout_constraintTop_toBottomOf="@+id/text_notes"
@@ -84,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@={product.price}"
+                app:strikeThrough="@{product.checked}"
                 android:textColor="@color/primary_dark"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/button_edit_product"
@@ -95,6 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="currency"
+                app:strikeThrough="@{product.checked}"
                 android:textColor="@color/primary_dark"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/text_price"

@@ -2,12 +2,14 @@ package com.makaji.aleksej.listopia.data.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
+import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
 
 import java.util.List;
 
@@ -35,5 +37,11 @@ public interface ShoppingListDao {
 
     @Query("DELETE FROM shopping_list")
     void deleteAll();
+
+    @Delete
+    void deleteShoppingList(ShoppingList shoppingList);
+
+    @Query("SELECT * FROM shopping_list")
+    LiveData<List<ShoppingListWithProducts>> loadShoppingListsWithProducts();
 
 }

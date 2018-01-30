@@ -132,4 +132,22 @@ public class ProductRepository {
             }
         }.execute();
     }
+
+    //Temporary Solution
+    @SuppressLint("StaticFieldLeak")
+    public void updateChecked(int id, boolean isChecked) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+               /* if (isChecked)
+                    productDao.updateChecked(id, 1);
+                else
+                    productDao.updateChecked(id, 0);*/
+               productDao.updateChecked(id, isChecked);
+                return null;
+            }
+        }.execute();
+    }
+
+
 }

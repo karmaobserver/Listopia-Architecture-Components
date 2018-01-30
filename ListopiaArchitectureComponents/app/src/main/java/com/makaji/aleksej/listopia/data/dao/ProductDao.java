@@ -37,4 +37,7 @@ public interface ProductDao {
     @Query("SELECT * FROM product WHERE id = :id")
     LiveData<Product> findProductById(int id);
 
+    @Query("UPDATE Product SET isChecked = :isChecked  WHERE id = :id")
+    void updateChecked(int id, boolean isChecked);
+
 }

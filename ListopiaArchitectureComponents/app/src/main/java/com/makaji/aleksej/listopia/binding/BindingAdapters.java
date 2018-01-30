@@ -2,6 +2,7 @@ package com.makaji.aleksej.listopia.binding;
 
 import android.databinding.BindingAdapter;
 import android.databinding.InverseBindingAdapter;
+import android.graphics.Paint;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +19,20 @@ public class BindingAdapters {
     @BindingAdapter("visibilityGone")
     public static void hideShow(View view, boolean hide) {
         view.setVisibility(hide ? View.GONE : View.VISIBLE);
+    }
+
+
+    @BindingAdapter("strikeThrough")
+    public static void setStrikeThrough(TextView view, boolean strikeThrough) {
+        if (strikeThrough) {
+            view.setPaintFlags(view.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            view.setEnabled(false);
+        }
+        else {
+            view.setPaintFlags(view.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            view.setEnabled(true);
+        }
+
     }
     //For float value in edit text
     @BindingAdapter("android:text")

@@ -4,13 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="shoppingList" type="com.makaji.aleksej.listopia.data.entity.ShoppingList"/>
-        <variable name="shoppingListButtonClickCallback" type="com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAdapter.ShoppingListButtonClickCallback"/>
+        <variable name="shoppingListWithProducts" type="com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts"/>
+        <!--<variable name="shoppingListButtonClickCallback" type="com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAdapter.ShoppingListButtonClickCallback"/>-->
     </data>
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:foreground="?android:attr/selectableItemBackground">
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,15 +21,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="@integer/textMaxLines"
-                android:text="@{shoppingList.name}"
+                android:text="@{shoppingListWithProducts.shoppingList.name}"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
-                app:layout_constraintEnd_toStartOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="repository name" />
@@ -44,13 +43,13 @@
                 app:srcCompat="@drawable/ic_dots_vert" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/text_max_products"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                android:text="5/17"
+                android:text="17"
                 android:textColor="@color/primary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/progressBar"
@@ -78,6 +77,34 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/text_slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp"
+                android:text="/"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                app:layout_constraintEnd_toStartOf="@+id/text_max_products"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_checked_products"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="8dp"
+                android:text="4"
+                android:textColor="@color/primary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                app:layout_constraintEnd_toStartOf="@+id/text_slash"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

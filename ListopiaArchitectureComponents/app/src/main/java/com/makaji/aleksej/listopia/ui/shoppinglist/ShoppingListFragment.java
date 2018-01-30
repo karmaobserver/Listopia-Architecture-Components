@@ -9,15 +9,20 @@ import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.binding.FragmentDataBindingComponent;
+import com.makaji.aleksej.listopia.data.entity.ShoppingList;
+import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
 import com.makaji.aleksej.listopia.databinding.FragmentShoppingListBinding;
+import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.di.module.Injectable;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
 import com.makaji.aleksej.listopia.ui.product.ProductActivity;
@@ -112,16 +117,16 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
         ShoppingListAdapter shoppingListAdapter = new ShoppingListAdapter(dataBindingComponent, shoppingListOnClick -> {
 
             Intent intent = new Intent(getActivity(), ProductActivity.class);
-            intent.putExtra(SHOPPING_LIST_ID, shoppingListOnClick.getId());
-            intent.putExtra(SHOPPING_LIST_NAME, shoppingListOnClick.getName());
+            intent.putExtra(SHOPPING_LIST_ID, shoppingListOnClick.shoppingList.getId());
+            intent.putExtra(SHOPPING_LIST_NAME, shoppingListOnClick.shoppingList.getName());
             startActivity(intent);
 
         }, shoppingListOnLongClick -> {
             Timber.d("LONG          KLiKNUOOOOOO" );
             //TODO: implenet Multi Select Feature
-        }, shoppingListOnButtonClick -> {
-            Timber.d("Button Clicked and ID is: " +shoppingListOnButtonClick.getId() );
-            shoppingListNavigationController.navigateToRenameShoppingList(shoppingListOnButtonClick.getId());
+        }, (shoppingListOptionsClick, view) -> {
+            //shoppingListNavigationController.navigateToRenameShoppingList(shoppingListOnButtonClick.shoppingList.getId());
+            setupOptionsPopupMenu(view, shoppingListOptionsClick.shoppingList);
         });
         binding.get().shoppingListRecycler.setAdapter(shoppingListAdapter);
         this.adapter = new AutoClearedValue<>(this, shoppingListAdapter);
@@ -129,7 +134,7 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
 
     private void subscribeToUi(ShoppingListViewModel shoppingListViewModel) {
         // Update the list when the data changes
-        shoppingListViewModel.getShoppingLists().observe(this, shoppingList -> {
+       /* shoppingListViewModel.getShoppingLists().observe(this, shoppingList -> {
             binding.get().setResource(shoppingList);
             //binding.executePendingBindings();
             Timber.d("Ceo objekat " + shoppingList);
@@ -137,6 +142,18 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
                 Timber.d("It's NULL");
             } else {
                 Timber.d("List Size: " + shoppingList.data.size());
+                adapter.get().replace(shoppingList.data);
+            }
+        });*/
+
+        shoppingListViewModel.getShoppingListsWithProducts().observe(this, shoppingList -> {
+            binding.get().setResource(shoppingList);
+            //binding.executePendingBindings();
+            Timber.d("Ceo objekat " + shoppingList);
+            if (shoppingList.data == null) {
+                Timber.d("It's NULL");
+            } else {
+               // Timber.d("PRODUCTS Size: " + shoppingList.data.get(0).products.size());
                 adapter.get().replace(shoppingList.data);
             }
         });
@@ -153,5 +170,40 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
         menu.clear();
         menuInflater.inflate(R.menu.menu_fragment_back_only, menu);
     }*/
+
+    /**
+     * Popup menu for options button from adapter
+     * @param view
+     * @param shoppingList
+     */
+    private void setupOptionsPopupMenu(View view, ShoppingList shoppingList) {
+        //creating a popup menu
+        PopupMenu popup = new PopupMenu(getContext(), view);
+        //inflating menu from xml resource
+        popup.inflate(R.menu.popup_menu_item_shopping_list);
+        //adding click listener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_rename_shopping_list:
+                        shoppingListNavigationController.navigateToRenameShoppingList(shoppingList.getId());
+                        break;
+                    case R.id.menu_delete_shopping_list:
+                        shoppingListViewModel.deleteShoppingList(shoppingList);
+                        break;
+                    case R.id.menu_share_shopping_list:
+                        //handle menu3 click
+                        break;
+                    case R.id.menu_copy_shopping_list:
+                        //handle menu4 click
+                        break;
+                }
+                return false;
+            }
+        });
+        //displaying the popup
+        popup.show();
+    }
 
 }
