@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Listopia</string>
+    <string name="server_client_id">479114592644-jilkbsr5flkcumgn0uvcnslsduli2t8o.apps.googleusercontent.com</string>
+    
     <string name="nav_drawer_header_sign_in">Sign In or Sign Up</string>
     <string name="nav_drawer_header_sync">To Sync in browser and share your lists</string>
     <string name="toolbar_shopping_list">My Lists</string>
@@ -9,6 +11,8 @@
     <string name="toolbar_product_add">Adding new product</string>
     <string name="toolbar_product_rename">Renaming product</string>
     <string name="toolbar_login">Sign in</string>
+    
+    <string name="menu_drawer_sign_out">You have been successfully signed out</string>
 
     <!--menu-->
     <string name="menu_rename_shopping_list">Rename</string>
@@ -51,6 +55,10 @@
 
     <string name="key_text_size" translatable="false">keyTextSize</string>
     <string name="key_currency" translatable="false">keyCurrency</string>
+    <string name="key_token" translatable="false">keyToken</string>
+    <string name="key_user_id" translatable="false">keyUserId</string>
+    <!--SharedPreferences-->
+
 
     <!-- text size -->
     <string name="settings_text_small_label">Small</string>
@@ -65,6 +73,12 @@
     <string name="settings_text_moderate_value">20</string>
     <string name="settings_text_large_value">23</string>
     <string name="settings_text_extra_value">26</string>
+
+    <!--Errors-->
+    <string name="error_network_login">Login Failed. A network error occurred.</string>
+
+    <!--Success-->
+    <string name="success_login">Successfully logged in.</string>
 
 
 

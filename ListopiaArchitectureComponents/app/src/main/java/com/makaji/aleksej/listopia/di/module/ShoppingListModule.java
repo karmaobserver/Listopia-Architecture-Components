@@ -2,15 +2,22 @@ package com.makaji.aleksej.listopia.di.module;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.makaji.aleksej.listopia.ui.login.LoginFragment;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListActivity;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListAddFragment;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListFragment;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListRenameFragment;
 
+import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
 
 /**

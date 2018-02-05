@@ -22,8 +22,6 @@ public class ShoppingList implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 	
-	
-
 	public ShoppingList() {
 		super();
 	}
@@ -49,7 +47,4 @@ public class ShoppingList implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
-
 }

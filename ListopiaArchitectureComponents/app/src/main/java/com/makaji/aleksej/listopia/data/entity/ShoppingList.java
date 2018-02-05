@@ -20,6 +20,8 @@ public class ShoppingList {
     @SerializedName("name")
     private String name;
 
+    //private int userId;
+
     public ShoppingList(int id, String name) {
         this.id = id;
         this.name = name;

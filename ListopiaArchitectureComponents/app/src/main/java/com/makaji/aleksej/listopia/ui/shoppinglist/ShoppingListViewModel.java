@@ -172,7 +172,6 @@ public class ShoppingListViewModel extends ViewModel {
 
     /////////////////////////////// Quick TEST ONLY //////////////////////
 
-
     //For quick test only
     public void insertAll() {
         shoppingListRepository.insertAll();

@@ -1,5 +1,6 @@
 package com.makaji.aleksej.listopia.di.module;
 
+import com.makaji.aleksej.listopia.di.scope.ActivityScoped;
 import com.makaji.aleksej.listopia.ui.product.ProductActivity;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListActivity;
 

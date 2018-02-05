@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.makaji.aleksej.listopia.ui.base.ListopiaViewModelFactory;
+import com.makaji.aleksej.listopia.ui.login.UserViewModel;
 import com.makaji.aleksej.listopia.ui.product.ProductViewModel;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListViewModel;
 
@@ -26,6 +27,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProductViewModel.class)
     abstract ViewModel bindProductViewModel(ProductViewModel productViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserViewModel.class)
+    abstract ViewModel bindUserViewModel(UserViewModel userViewModel);
 
     @Binds
     abstract ViewModelProvider.Factory bindViewModelFactory(ListopiaViewModelFactory factory);

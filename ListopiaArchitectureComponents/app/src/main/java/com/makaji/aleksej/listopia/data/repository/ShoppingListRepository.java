@@ -14,6 +14,7 @@ import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.AppExecutors;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
+import com.makaji.aleksej.listopia.data.entity.User;
 import com.makaji.aleksej.listopia.data.vo.Resource;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 import timber.log.Timber;
 
 /**
@@ -116,7 +121,7 @@ public class ShoppingListRepository {
             @NonNull
             @Override
             protected LiveData<List<ShoppingListWithProducts>> loadFromDb() {
-                Timber.d("LoadFromDB: ");
+                Timber.d("LoadFromDB: loadShoppingListsWithProducts" );
                 return shoppingListDao.loadShoppingListsWithProducts();
             }
 
