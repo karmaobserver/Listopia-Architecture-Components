@@ -3,9 +3,14 @@ package com.makaji.aleksej.listopia.data.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
+import com.makaji.aleksej.listopia.data.database.ListopiaDb;
+import com.makaji.aleksej.listopia.data.database.ListopiaTypeConverters;
+
+import java.util.List;
 
 /**
  * Created by Aleksej on 1/30/2018.
@@ -25,8 +30,11 @@ public class User {
     @SerializedName("email")
     private String email;
 
-    @SerializedName("image_url")
+    @SerializedName("imageUrl")
     private String imageUrl;
+
+    @TypeConverters(ListopiaTypeConverters.class)
+    private List<User> friends;
 
     public User(String id, String name, String email, String imageUrl) {
         this.id = id;
@@ -69,5 +77,13 @@ public class User {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<User> friends) {
+        this.friends = friends;
     }
 }

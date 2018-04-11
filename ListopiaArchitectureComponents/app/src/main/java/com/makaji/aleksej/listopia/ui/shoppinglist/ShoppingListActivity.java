@@ -1,12 +1,8 @@
 package com.makaji.aleksej.listopia.ui.shoppinglist;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,32 +17,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.makaji.aleksej.listopia.R;
-import com.makaji.aleksej.listopia.data.entity.ShoppingList;
-import com.makaji.aleksej.listopia.data.entity.User;
-import com.makaji.aleksej.listopia.data.repository.ShoppingListRepository;
 import com.makaji.aleksej.listopia.databinding.ActivityShoppingListBinding;
 import com.makaji.aleksej.listopia.databinding.HeaderNavigationBinding;
-import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.base.BaseActivity;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
-import com.makaji.aleksej.listopia.ui.login.UserViewModel;
+import com.makaji.aleksej.listopia.ui.user.UserViewModel;
 
-import android.databinding.DataBindingComponent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -55,7 +39,7 @@ import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
 
-public class ShoppingListActivity extends BaseActivity implements HasSupportFragmentInjector, OnFragmentToolbarInteraction{
+public class ShoppingListActivity extends BaseActivity implements HasSupportFragmentInjector, OnFragmentToolbarInteraction {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -79,6 +63,8 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     private UserViewModel userViewModel;
 
     private ActivityShoppingListBinding binding;
+
+    private HeaderNavigationBinding headerBinding;
 
     private DrawerLayout drawerLayout;
 
@@ -107,6 +93,13 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
         if (savedInstanceState == null) {
             shoppingListNavigationController.navigateToShoppingList();
         }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
 
     }
@@ -144,34 +137,17 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     }
 
     private void setupDrawerContent(UserViewModel userViewModel) {
-        //navigationView.getMenu().getItem(R.id.sign_out).setVisible(false);
 
         drawerLayout = binding.drawerLayout;
         navigationView = binding.navigationvView;
-        HeaderNavigationBinding headerBinding = HeaderNavigationBinding.bind(navigationView.getHeaderView(0));
+        headerBinding = HeaderNavigationBinding.bind(navigationView.getHeaderView(0));
 
-      /*  String resUserId = getResources().getString(R.string.key_user_id);
+        //TODO is it good solution?
+       /* String resUserId = getResources().getString(R.string.key_user_id);
         String userId = sharedPreferences.getString(resUserId, "defaultUserId");
         userViewModel.setId(userId);*/
 
-        userViewModel.getUser().observe(this, user -> {
-
-            Timber.d("Observe getUser " + user);
-            if (user == null || user.data == null) {
-                Timber.d("It's NULL User");
-                headerBinding.setUser(null);
-                //Hide Sign Out item
-                navigationView.getMenu().getItem(5).setVisible(false);
-
-            } else {
-                Timber.d("User which I set: " + user.data.getName());
-                headerBinding.setUser(user.data);
-                headerBinding.textLogged.setText(user.data.getName());
-                //Show Sign Out item
-                navigationView.getMenu().getItem(5).setVisible(true);
-
-            }
-        });
+        subscribeToUser();
 
         //To show original color of icons
         navigationView.setItemIconTintList(null);
@@ -187,7 +163,6 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
 
         headerBinding.signIn.setOnClickListener(view -> {
             shoppingListNavigationController.navigateToSignIn();
-            // Close the navigation drawer
             drawerLayout.closeDrawers();
         });
     }
@@ -198,23 +173,24 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
                 Timber.d("TRASH1 ITEM GOT CLICKED" );
                 break;
             case R.id.settings:
-                Timber.d("Settings ITEM GOT CLICKED" );
                 shoppingListNavigationController.navigateToSettings();
                 break;
             case R.id.sign_out:
                 googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Timber.d("singOut");
-                        //make user null
-                        userViewModel.setId("0");
+                        Timber.d("SignOut");
                         sharedPreferences.edit().putString(getString(R.string.key_token), "").commit();
                         sharedPreferences.edit().putString(getString(R.string.key_user_id), "").commit();
+                        userViewModel.setId("0");
+                        //Refresh UI in fragment
+                        ShoppingListFragment fragment = (ShoppingListFragment) getSupportFragmentManager().findFragmentByTag("FRAGMENT_SHOPPING_LIST_TAG");
+                        fragment.subscribeToUi(shoppingListViewModel);
                         Snackbar.make(drawerLayout, R.string.menu_drawer_sign_out, Snackbar.LENGTH_LONG).show();
                     }
                 });
             default:
-                Timber.d("TRASH3 ITEM GOT CLICKED" );
+                Timber.d("SomeDefualt ITEM GOT CLICKED" );
         }
         // Highlight the selected item has been done by NavigationView
         //menuItem.setChecked(true);
@@ -227,10 +203,9 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
     @Override
     public void onResume() {
         super.onResume();
-        //Set logged user for header
+        //Get user by userId
         String resUserId = getResources().getString(R.string.key_user_id);
         String userId = sharedPreferences.getString(resUserId, "defaultUserId");
-        Timber.d("OnResume Activity " + userId);
         userViewModel.setId(userId);
     }
 
@@ -274,5 +249,26 @@ public class ShoppingListActivity extends BaseActivity implements HasSupportFrag
         }
         finish();
     }
+
+    public void subscribeToUser() {
+        userViewModel.getUser().observe(this, user -> {
+            Timber.d("Observing user " + user);
+            if (user == null || user.data == null) {
+                Timber.d("User is NULL");
+                headerBinding.setUser(null);
+                //Hide Sign Out item
+                navigationView.getMenu().getItem(5).setVisible(false);
+
+            } else {
+                Timber.d("User which I set: " + user.data.getName());
+                headerBinding.setUser(user.data);
+                headerBinding.textName.setText(user.data.getName());
+                headerBinding.textEmail.setText(user.data.getEmail());
+                //Show Sign Out item
+                navigationView.getMenu().getItem(5).setVisible(true);
+            }
+        });
+    }
+
 }
 

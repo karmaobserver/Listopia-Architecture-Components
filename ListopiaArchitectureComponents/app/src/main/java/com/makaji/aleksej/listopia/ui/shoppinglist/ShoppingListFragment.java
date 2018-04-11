@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -43,6 +44,9 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
 
     @Inject
     ShoppingListNavigationController shoppingListNavigationController;
+
+    @Inject
+    SharedPreferences sharedPreferences;
 
     private static final String SHOPPING_LIST_ID = "shopping_list_id";
     private static final String SHOPPING_LIST_NAME = "shopping_list_name";
@@ -114,7 +118,8 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
      * ShoppingListCallBack, with events onClick, onLongClick, onButtonClick
      */
     private void setShoppingListCallBacks() {
-        ShoppingListAdapter shoppingListAdapter = new ShoppingListAdapter(dataBindingComponent, shoppingListOnClick -> {
+
+        ShoppingListAdapter shoppingListAdapter = new ShoppingListAdapter(dataBindingComponent, this, shoppingListOnClick -> {
 
             Intent intent = new Intent(getActivity(), ProductActivity.class);
             intent.putExtra(SHOPPING_LIST_ID, shoppingListOnClick.shoppingList.getId());
@@ -132,7 +137,7 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
         this.adapter = new AutoClearedValue<>(this, shoppingListAdapter);
     }
 
-    private void subscribeToUi(ShoppingListViewModel shoppingListViewModel) {
+    public void subscribeToUi(ShoppingListViewModel shoppingListViewModel) {
         // Update the list when the data changes
        /* shoppingListViewModel.getShoppingLists().observe(this, shoppingList -> {
             binding.get().setResource(shoppingList);
@@ -145,17 +150,22 @@ public class ShoppingListFragment extends LifecycleFragment implements Injectabl
                 adapter.get().replace(shoppingList.data);
             }
         });*/
+        String resUserId = getResources().getString(R.string.key_user_id);
+        String userId = sharedPreferences.getString(resUserId, "defualtValue");
+        shoppingListViewModel.setUserId(userId);
 
         shoppingListViewModel.getShoppingListsWithProducts().observe(this, shoppingList -> {
+            Timber.d("Observing ShoppingList " + shoppingList);
             binding.get().setResource(shoppingList);
             //binding.executePendingBindings();
-            Timber.d("Ceo objekat " + shoppingList);
+
             if (shoppingList.data == null) {
-                Timber.d("It's NULL");
+                Timber.d("ShoppingList is NULL");
+                adapter.get().replace(null);
             } else {
-               // Timber.d("PRODUCTS Size: " + shoppingList.data.get(0).products.size());
                 adapter.get().replace(shoppingList.data);
             }
+            //adapter.get().replace(shoppingList.data);
         });
 
         //FAB-addNewShoppingList

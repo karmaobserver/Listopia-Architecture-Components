@@ -156,11 +156,13 @@ public class ProductFragment extends LifecycleFragment implements Injectable {
     private void subscribeToUi(ProductViewModel productViewModel) {
         // Update the list when the data changes
         productViewModel.getProducts().observe(this, products -> {
+            Timber.d("Observing Product " + products);
             binding.get().setResource(products);
             //binding.executePendingBindings();
-            Timber.d("Ceo objekat " + products);
+
             if (products.data == null) {
-                Timber.d("It's NULL");
+                Timber.d("Product is NULL");
+                adapter.get().replace(null);
             } else {
                 Timber.d("List Size: " + products.data.size());
                 adapter.get().replace(products.data);

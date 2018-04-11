@@ -5,6 +5,7 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -28,7 +29,8 @@ import java.util.Random;
 /**
  * Main database description.
  */
-@Database(entities = {ShoppingList.class, Product.class, User.class}, version = 8)
+@Database(entities = {ShoppingList.class, Product.class, User.class}, version = 15)
+@TypeConverters({ListopiaTypeConverters.class})
 public abstract class ListopiaDb extends RoomDatabase {
 
     abstract public ShoppingListDao shoppingListDao();

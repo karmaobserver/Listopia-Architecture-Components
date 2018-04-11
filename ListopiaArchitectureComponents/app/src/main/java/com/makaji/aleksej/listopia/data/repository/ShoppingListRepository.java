@@ -104,7 +104,7 @@ public class ShoppingListRepository {
         }.asLiveData();
     }
 
-    public LiveData<Resource<List<ShoppingListWithProducts>>> loadShoppingListsWithProducts() {
+    /*public LiveData<Resource<List<ShoppingListWithProducts>>> loadShoppingListsWithProducts() {
         return new NetworkBoundResource<List<ShoppingListWithProducts>, List<ShoppingListWithProducts>>(appExecutors) {
 
             @Override
@@ -123,6 +123,40 @@ public class ShoppingListRepository {
             protected LiveData<List<ShoppingListWithProducts>> loadFromDb() {
                 Timber.d("LoadFromDB: loadShoppingListsWithProducts" );
                 return shoppingListDao.loadShoppingListsWithProducts();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<List<ShoppingListWithProducts>>> createCall() {
+               *//* Timber.d("Making call:");
+                LiveData<ApiResponse<List<ShoppingList>>> result = listopiaService.getShoppingLists();
+                Timber.d("Result is: " + result);
+                return result;*//*
+                //return listopiaService.getShoppingLists();
+                return null;
+            }
+        }.asLiveData();
+    }*/
+
+    public LiveData<Resource<List<ShoppingListWithProducts>>> loadShoppingListsWithProducts(String userId) {
+        return new NetworkBoundResource<List<ShoppingListWithProducts>, List<ShoppingListWithProducts>>(appExecutors) {
+
+            @Override
+            protected void saveCallResult(@NonNull List<ShoppingListWithProducts> items) {
+                Timber.d("SaveCall itemSize: " + items.size());
+                //shoppingListDao.insertAll(items);
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<ShoppingListWithProducts> data) {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<ShoppingListWithProducts>> loadFromDb() {
+                Timber.d("LoadFromDB: loadShoppingListsWithProducts" );
+                return shoppingListDao.loadShoppingListsWithProducts(userId);
             }
 
             @NonNull

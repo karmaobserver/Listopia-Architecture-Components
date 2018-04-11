@@ -2,24 +2,19 @@ package com.makaji.aleksej.listopia.di.module;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
-import android.arch.persistence.room.util.StringUtil;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.support.v7.preference.PreferenceManager;
 
-import com.google.android.gms.auth.api.Auth;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.data.api.ListopiaService;
 import com.makaji.aleksej.listopia.data.dao.ProductDao;
 import com.makaji.aleksej.listopia.data.dao.ShoppingListDao;
 import com.makaji.aleksej.listopia.data.dao.UserDao;
 import com.makaji.aleksej.listopia.data.database.ListopiaDb;
-import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListActivity;
 import com.makaji.aleksej.listopia.util.LiveDataCallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
@@ -32,6 +27,7 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
@@ -71,7 +67,7 @@ class AppModule {
     @Provides
     ListopiaService provideListopiaService(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl("http://192.168.0.10:8080/")
+                .baseUrl("http://192.168.0.14:8080/")
                 //.addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(new LiveDataCallAdapterFactory())
@@ -111,12 +107,32 @@ class AppModule {
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(Cache cache, Interceptor interceptor) {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .cache(cache)
                 .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
                 .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
                 .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
+                //Testing only
+               /* .addInterceptor(new Interceptor() {
+                    @Override
+                    public okhttp3.Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        okhttp3.Response response = chain.proceed(request);
+
+                        // todo deal with the issues the way you need to
+                        if (response.code() == 401) {
+                            Timber.d("401 HAPPEND ");
+                            Timber.d("401 " + response.body().string());
+                            Timber.d("401 " + response.message());
+                            return response;
+                        }
+                        return response;
+                    }
+                })*/
+                .addInterceptor(logging)
                 .build();
     }
 
@@ -130,9 +146,9 @@ class AppModule {
     @Singleton
     @Provides
     ListopiaDb provideDb(Application application) {
-        return Room.databaseBuilder(application, ListopiaDb.class,"listopia.db").build();
+        //return Room.databaseBuilder(application, ListopiaDb.class,"listopia.db").build();
         //For destroying database and creating new, also I need to change version in ListopiaDB
-        //return Room.databaseBuilder(application, ListopiaDb.class, "listopia.db").fallbackToDestructiveMigration().build();
+        return Room.databaseBuilder(application, ListopiaDb.class, "listopia.db").fallbackToDestructiveMigration().build();
     }
 
     @Singleton

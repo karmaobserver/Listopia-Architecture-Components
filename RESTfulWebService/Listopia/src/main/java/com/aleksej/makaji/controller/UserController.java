@@ -7,11 +7,17 @@ import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.aleksej.makaji.dto.UserWithFriendsDto;
 import com.aleksej.makaji.model.User;
 import com.aleksej.makaji.service.UserService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -28,7 +34,7 @@ public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
+
 	//public static final String CLIENT_ID = "479114592644-91qbbkho91juascc95fiasf1a0bj8acr.apps.googleusercontent.com";
 	public static final String CLIENT_ID = "479114592644-jilkbsr5flkcumgn0uvcnslsduli2t8o.apps.googleusercontent.com";
 		
@@ -87,5 +93,38 @@ public class UserController {
 		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	/*@RequestMapping(value = "/user/addUserToFriendsByEmail", method = RequestMethod.POST)
+    public ResponseEntity<User> addUserToFriendsByEmail(@RequestBody String email) {
+    	ResponseEntity<User> responseEntity = userService.addUserToFriendsByEmail(email);     
+        return responseEntity;
+    }*/
+	
+	
+	/*@RequestMapping(value = "/user/addUserToFriendsByEmail", method = RequestMethod.POST)
+    public ResponseEntity<User> addUserToFriendsByEmail(@RequestPart("userId") String userId, @RequestPart("email") String email) {
+    	ResponseEntity<User> responseEntity = userService.addUserToFriendsByEmail(userId, email);     
+        return responseEntity;
+    }*/
+	
+	/*@RequestMapping(value = "/user/addUserToFriendsByEmail", method = RequestMethod.POST)
+    public ResponseEntity<User> addUserToFriendsByEmail(@RequestParam String userId, @RequestParam String email) {
+    	ResponseEntity<User> responseEntity = userService.addUserToFriendsByEmail(userId, email);     
+        return responseEntity;
+    }*/
+	
+	@RequestMapping(value = "/user/addUserToFriendsByEmail", method = RequestMethod.POST)
+    public ResponseEntity<?> addUserToFriendsByEmail(@RequestParam String userId, @RequestParam String email) {
+    	ResponseEntity<?> responseEntity = userService.addUserToFriendsByEmail(userId, email);     
+        return responseEntity;
+    }
+	
+	@RequestMapping(value = "/user/{userId}/friends", method = RequestMethod.DELETE)
+    public ResponseEntity<User> deleteAllFriends(@PathVariable("userId") String userId) {
+		System.out.println("DeleteAllFriends API hitted");
+    	ResponseEntity<User> responseEntity = userService.deleteAllFriends(userId);     
+        return responseEntity;
+		//return new ResponseEntity<String>("GRESKAAAAAAAAAAAAAAAAAA", HttpStatus.CONFLICT);
+    }
 
 }

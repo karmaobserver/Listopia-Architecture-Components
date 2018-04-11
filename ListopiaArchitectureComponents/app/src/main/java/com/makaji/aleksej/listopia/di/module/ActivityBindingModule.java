@@ -1,8 +1,8 @@
 package com.makaji.aleksej.listopia.di.module;
 
-import com.makaji.aleksej.listopia.di.scope.ActivityScoped;
 import com.makaji.aleksej.listopia.ui.product.ProductActivity;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListActivity;
+import com.makaji.aleksej.listopia.ui.user.FriendActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -20,4 +20,8 @@ public abstract class ActivityBindingModule {
 
     @ContributesAndroidInjector(modules = ProductModule.class)
     abstract ProductActivity contributeProductActivity();
+
+    @ContributesAndroidInjector(modules = UserModule.class)
+    abstract FriendActivity contributeFriendActivity();
+
 }

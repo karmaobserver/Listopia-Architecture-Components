@@ -21,6 +21,8 @@
         </activity>
         <activity android:name=".ui.product.ProductActivity"
             android:parentActivityName=".ui.shoppinglist.ShoppingListActivity" />
+        <activity android:name=".ui.user.FriendActivity"
+            android:parentActivityName=".ui.product.ProductActivity" />
     </application>
 
 </manifest>

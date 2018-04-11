@@ -73,6 +73,7 @@ dependencies {
 
     //Glide
     implementation deps.glide
+    annotationProcessor deps.glide
 
     //Retrofit 2
     implementation deps.retrofit.runtime
@@ -108,8 +109,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.google.android.gms:play-services-identity:11.8.0'
 
+    //retrofit 2 for testing
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+
     //For retrofit 2 String converter
    // implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+
+    //For adding headers to adapter
+    implementation 'com.negusoft.compoundadapter:compoundadapter:0.8.0'
 
 
 }

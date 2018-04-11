@@ -13,7 +13,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/shopping_list_background">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/shopping_list_recycler"

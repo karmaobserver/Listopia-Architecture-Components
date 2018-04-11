@@ -24,6 +24,7 @@ import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListActivity;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListNavigationController;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListViewModel;
+import com.makaji.aleksej.listopia.ui.user.FriendActivity;
 
 import javax.inject.Inject;
 
@@ -114,6 +115,10 @@ public class ProductActivity extends BaseActivity implements HasSupportFragmentI
         switch (item.getItemId()) {
             case R.id.settings:
                 //It has submenu, in case we need logic when settings has been clicked, we write here
+                return true;
+            case R.id.friends:
+                Intent intent = new Intent(this, FriendActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.submenu_settings_delete_all:
                 productViewModel.deleteAllProducts();

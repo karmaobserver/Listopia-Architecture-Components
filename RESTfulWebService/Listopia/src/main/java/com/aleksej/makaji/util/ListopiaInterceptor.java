@@ -26,7 +26,12 @@ public class ListopiaInterceptor extends HandlerInterceptorAdapter {
         
         if (token == null) {
         	System.out.println("Token is null, sendError");
-        	response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        	//With method sendError() we send "text/html", and we need json to able to read message in client
+        	//response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+        	response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        	response.setContentType("application/json");
+        	response.setCharacterEncoding("UTF-8");
+        	response.getWriter().write("Unauthorized, token has expired, please relog");
         	return false;
         }
         System.out.println("Token is valid, handle http request");

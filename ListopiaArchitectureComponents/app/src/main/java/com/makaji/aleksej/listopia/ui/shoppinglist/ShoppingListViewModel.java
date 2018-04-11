@@ -5,6 +5,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 import com.makaji.aleksej.listopia.ListopiaApp;
 import com.makaji.aleksej.listopia.R;
@@ -32,6 +34,7 @@ public class ShoppingListViewModel extends ViewModel {
     private LiveData<Resource<ShoppingList>> shoppingList;
     private final LiveData<Resource<List<ShoppingListWithProducts>>> shoppingListsWithProducts;
     final MutableLiveData<Integer> shoppingListId = new MutableLiveData<>();
+    private MutableLiveData<String> userId = new MutableLiveData<>();
     private final SingleLiveData<Void> addShoppingListClick = new SingleLiveData<>();
     private final SingleLiveData<Void> createShoppingListClick = new SingleLiveData<>();
     private final SingleLiveData<Void> renameShoppingListClick = new SingleLiveData<>();
@@ -43,7 +46,10 @@ public class ShoppingListViewModel extends ViewModel {
     ShoppingListRepository shoppingListRepository;
 
     @Inject
-    Context context;
+    Resources resources;
+
+    @Inject
+    SharedPreferences sharedPreferences;
 
 
     @Inject
@@ -58,7 +64,14 @@ public class ShoppingListViewModel extends ViewModel {
             }
         });
 
-        shoppingListsWithProducts = shoppingListRepository.loadShoppingListsWithProducts();
+        shoppingListsWithProducts = Transformations.switchMap(userId, id -> {
+            Timber.d("Transformations shoppingListsWithProducts");
+            if (id == null) {
+                return AbsentLiveData.create();
+            } else {
+                return shoppingListRepository.loadShoppingListsWithProducts(id);
+            }
+        });
     }
 
     public LiveData<Resource<List<ShoppingList>>> getShoppingLists() {
@@ -81,6 +94,16 @@ public class ShoppingListViewModel extends ViewModel {
         shoppingListId.setValue(id);
     }
 
+    //Set id to get ShoppingListsWithProducts based on UserId (call loadShoppingListsWithProducts)
+    public void setUserId(String id) {
+        Timber.d(" pre setting userId ShoppingListViewModel");
+        if (Objects.equals(userId.getValue(), id)) {
+            return;
+        }
+        Timber.d("setting userId ShoppingListViewModel");
+        userId.setValue(id);
+    }
+
     //FAB click event
     public void onAddShoppingListClick() {
         //insertAll();
@@ -97,8 +120,15 @@ public class ShoppingListViewModel extends ViewModel {
             return;
         }
 
+        String resUserId = resources.getString(R.string.key_user_id);
+        Timber.d("Create resUserId " + resUserId);
+        String userId = sharedPreferences.getString(resUserId, "defualtValue");
+        Timber.d("Create userId " + userId);
+
         ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setUserId(userId);
         shoppingList.setName(textListName.getValue());
+
         shoppingListRepository.insertShoppingList(shoppingList);
 
         createShoppingListClick.call();
@@ -133,7 +163,7 @@ public class ShoppingListViewModel extends ViewModel {
         if ((textListName.getValue() == null) || (textListName.getValue().length() == 0)) {
             errorTextListName.setValue("List name can't be empty");
             isValid = false;
-        } else if (textListName.getValue().length() > context.getResources().getInteger(R.integer.listNameMaxLength)) {
+        } else if (textListName.getValue().length() > resources.getInteger(R.integer.listNameMaxLength)) {
             errorTextListName.setValue("List name need to be shorter");
             isValid = false;
         } else {
@@ -148,7 +178,7 @@ public class ShoppingListViewModel extends ViewModel {
         if ((listName == null) || (listName.length() == 0)) {
             errorTextListName.setValue("List name can't be empty");
             isValid = false;
-        } else if (listName.length() > context.getResources().getInteger(R.integer.listNameMaxLength)) {
+        } else if (listName.length() > resources.getInteger(R.integer.listNameMaxLength)) {
             errorTextListName.setValue("List name need to be shorter");
             isValid = false;
         } else {

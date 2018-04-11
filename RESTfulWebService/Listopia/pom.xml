@@ -67,9 +67,13 @@
 	      <artifactId>google-api-services-gmail</artifactId>
 	      <version>v1-rev79-1.23.0</version>
 	    </dependency>
-		
-		
-		
+
+
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+		</dependency>
 	</dependencies>
 	
 	

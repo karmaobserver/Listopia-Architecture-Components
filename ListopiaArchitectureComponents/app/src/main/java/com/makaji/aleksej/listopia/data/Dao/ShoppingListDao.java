@@ -44,4 +44,7 @@ public interface ShoppingListDao {
     @Query("SELECT * FROM shopping_list")
     LiveData<List<ShoppingListWithProducts>> loadShoppingListsWithProducts();
 
+    @Query("SELECT * FROM shopping_list WHERE userId = :userId")
+    LiveData<List<ShoppingListWithProducts>> loadShoppingListsWithProducts(String userId);
+
 }

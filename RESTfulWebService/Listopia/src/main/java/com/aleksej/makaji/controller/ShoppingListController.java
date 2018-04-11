@@ -36,121 +36,12 @@ public class ShoppingListController {
 	@Autowired
 	ShoppingListService shoppingListService;
 	
-	//public static final String CLIENT_ID = "479114592644-91qbbkho91juascc95fiasf1a0bj8acr.apps.googleusercontent.com";
-	public static final String CLIENT_ID = "479114592644-jilkbsr5flkcumgn0uvcnslsduli2t8o.apps.googleusercontent.com";
-	/*private static final NetHttpTransport  transport = new NetHttpTransport();
-	private static final JsonFactory jsonFactory = new JacksonFactory();*/
-	
 	@RequestMapping(value = "/shoppingLists", method = RequestMethod.GET)
 	public ResponseEntity<List<ShoppingList>> getShoppingLists() {
 		List<ShoppingList> shoppingLists = (List<ShoppingList>) shoppingListService.getAll();
 		return new ResponseEntity<List<ShoppingList>>(shoppingLists, HttpStatus.OK);
 	}
 	
-	/*@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ResponseEntity<User> login(@RequestBody TextNode idTokenString) throws GeneralSecurityException, IOException {
-		
-		System.out.println("Login API has been hitted");
-		System.out.println("idTokenString: " + idTokenString.asText());
-		
-		// Set up the HTTP transport and JSON factory
-		HttpTransport transport = new NetHttpTransport();
-		JsonFactory jsonFactory = new JacksonFactory();
-		
-		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-				// Specify the CLIENT_ID of the app that accesses the backend:
-			    .setAudience(Collections.singletonList("479114592644-jilkbsr5flkcumgn0uvcnslsduli2t8o.apps.googleusercontent.com"))
-			    //.setIssuer("https://accounts.google.com")
-			    // Or, if multiple clients access the backend:
-			    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
-			    .build();
-		
-		GoogleIdToken idToken = verifier.verify(idTokenString.asText());
-		System.out.println("idToken after verification: " + idToken);
-		if (idToken != null) {
-		  Payload payload = idToken.getPayload();
-
-		  // Print user identifier
-		  String userId = payload.getSubject();
-		  System.out.println("User ID: " + userId);
-
-		  // Get profile information from payload
-		  String email = payload.getEmail();
-		  System.out.println("User Email: " + email);
-		  boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-		  String name = (String) payload.get("name");
-		  String pictureUrl = (String) payload.get("picture");
-		  String locale = (String) payload.get("locale");
-		  String familyName = (String) payload.get("family_name");
-		  String givenName = (String) payload.get("given_name");
-		  
-		  User user = new User();
-		  user.setId(userId);
-		  user.setEmail(email);
-		  user.setName(name);
-		  user.setImageUrl(pictureUrl);
-		  
-		  return new ResponseEntity<User>(user, HttpStatus.OK);
-		  // Use or store profile information
-		  // ...
-
-		} else {
-		  System.out.println("Invalid ID token.");
-		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}*/
 	
-	/*@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<User> login(@RequestHeader(value="Authorization") String idTokenString) throws GeneralSecurityException, IOException {
-		
-		System.out.println("Login API has been hitted");
-		System.out.println("idTokenString: " + idTokenString);
-		
-		// Set up the HTTP transport and JSON factory
-		HttpTransport transport = new NetHttpTransport();
-		JsonFactory jsonFactory = new JacksonFactory();
-		
-		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-				// Specify the CLIENT_ID of the app that accesses the backend:
-			    .setAudience(Collections.singletonList("479114592644-jilkbsr5flkcumgn0uvcnslsduli2t8o.apps.googleusercontent.com"))
-			    //.setIssuer("https://accounts.google.com")
-			    // Or, if multiple clients access the backend:
-			    //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
-			    .build();
-		
-		GoogleIdToken idToken = verifier.verify(idTokenString);
-		System.out.println("idToken after verification: " + idToken);
-		if (idToken != null) {
-		  Payload payload = idToken.getPayload();
-
-		  // Print user identifier
-		  String userId = payload.getSubject();
-		  System.out.println("User ID: " + userId);
-
-		  // Get profile information from payload
-		  String email = payload.getEmail();
-		  System.out.println("User Email: " + email);
-		  boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-		  String name = (String) payload.get("name");
-		  String pictureUrl = (String) payload.get("picture");
-		  String locale = (String) payload.get("locale");
-		  String familyName = (String) payload.get("family_name");
-		  String givenName = (String) payload.get("given_name");
-		  
-		  User user = new User();
-		  user.setId(userId);
-		  user.setEmail(email);
-		  user.setName(name);
-		  user.setImageUrl(pictureUrl);
-		  
-		  return new ResponseEntity<User>(user, HttpStatus.OK);
-		  // Use or store profile information
-		  // ...
-
-		} else {
-		  System.out.println("Invalid ID token.");
-		  return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-	}*/
 	
 }

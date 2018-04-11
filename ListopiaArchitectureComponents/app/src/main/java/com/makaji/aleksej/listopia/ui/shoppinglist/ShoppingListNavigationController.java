@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.ui.common.SettingsFragment;
-import com.makaji.aleksej.listopia.ui.login.LoginFragment;
+import com.makaji.aleksej.listopia.ui.user.LoginFragment;
 
 import javax.inject.Inject;
 
@@ -29,8 +29,9 @@ public class ShoppingListNavigationController {
 
     public void navigateToShoppingList() {
         ShoppingListFragment fragment = new ShoppingListFragment();
+        String tag = "FRAGMENT_SHOPPING_LIST_TAG";
         fragmentManager.beginTransaction()
-                .replace(containerId, fragment)
+                .replace(containerId, fragment, tag)
                 .commitAllowingStateLoss();
         //Careful, need to be tested
         //clearBackStack();

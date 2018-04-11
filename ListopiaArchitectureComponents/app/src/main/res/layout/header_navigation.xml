@@ -42,21 +42,36 @@
             app:visibilityGone="@{user != null}"/>
 
         <TextView
-            android:id="@+id/textLogged"
+            android:id="@+id/textName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@={user.name}"
-            app:layout_constraintBottom_toTopOf="@+id/sign_in"
+            android:text="Name"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textEmail"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.308"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:visibilityGone="@{user == null}"
-            tools:text="IsLogged" />
+            tools:text="Name" />
+
+        <TextView
+            android:id="@+id/textEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Email"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:visibilityGone="@{user == null}"
+            tools:text="Email" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

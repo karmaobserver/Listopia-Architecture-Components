@@ -6,7 +6,10 @@ package com.makaji.aleksej.listopia.ui.shoppinglist;
 
 import android.databinding.DataBindingComponent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,8 +20,10 @@ import com.makaji.aleksej.listopia.R;
 import com.makaji.aleksej.listopia.data.entity.Product;
 import com.makaji.aleksej.listopia.data.entity.ShoppingList;
 import com.makaji.aleksej.listopia.data.entity.ShoppingListWithProducts;
+import com.makaji.aleksej.listopia.databinding.FragmentShoppingListBinding;
 import com.makaji.aleksej.listopia.databinding.ItemShoppingListBinding;
 import com.makaji.aleksej.listopia.ui.common.DataBoundListAdapter;
+import com.makaji.aleksej.listopia.util.AutoClearedValue;
 
 import java.util.Objects;
 
@@ -35,13 +40,19 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingListWithPr
     private final ShoppingListClickCallback shoppingListClickCallback;
     private final ShoppingListLongClickCallback shoppingListLongClickCallback;
     private final ShoppingListOptionsClickCallback shoppingListOptionsClickCallback;
+    private final Fragment fragment;
 
-    public ShoppingListAdapter(DataBindingComponent dataBindingComponent,
+    AutoClearedValue<ItemShoppingListBinding> binding;
+    private AutoClearedValue<ShoppingListFriendsShareAdapter> adapter;
+
+    public ShoppingListAdapter(DataBindingComponent dataBindingComponent, Fragment fragment,
                                ShoppingListClickCallback shoppingListClickCallback, ShoppingListLongClickCallback shoppingListLongClickCallback, ShoppingListOptionsClickCallback shoppingListOptionsClickCallback) {
         this.dataBindingComponent = dataBindingComponent;
         this.shoppingListClickCallback = shoppingListClickCallback;
         this.shoppingListLongClickCallback = shoppingListLongClickCallback;
         this.shoppingListOptionsClickCallback = shoppingListOptionsClickCallback;
+        this.fragment = fragment;
+
     }
 
     @Override
@@ -73,6 +84,11 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingListWithPr
             }
         });
 
+        //Nested RecyclerView with friends shared list
+        ShoppingListFriendsShareAdapter shoppingListFriendsShareAdapter = new ShoppingListFriendsShareAdapter(dataBindingComponent);
+        binding.recyclerViewFriendsShare.setAdapter(shoppingListFriendsShareAdapter);
+        this.adapter = new AutoClearedValue<>(fragment, shoppingListFriendsShareAdapter);
+
         return binding;
     }
 
@@ -86,6 +102,9 @@ public class ShoppingListAdapter extends DataBoundListAdapter<ShoppingListWithPr
         //setup progressBar
         binding.progressBar.setMax(item.products.size());
         binding.progressBar.setProgress(numberOfCheckedItems);
+
+        //For nested recyclerview
+        adapter.get().replace(item.shoppingList.getFriendsWhoShare());
     }
 
     @Override

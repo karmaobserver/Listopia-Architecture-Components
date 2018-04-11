@@ -1,4 +1,4 @@
-package com.makaji.aleksej.listopia.ui.login;
+package com.makaji.aleksej.listopia.ui.user;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -13,24 +13,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.makaji.aleksej.listopia.R;
@@ -40,7 +33,6 @@ import com.makaji.aleksej.listopia.databinding.FragmentLoginBinding;
 import com.makaji.aleksej.listopia.di.module.Injectable;
 import com.makaji.aleksej.listopia.ui.common.OnFragmentToolbarInteraction;
 import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListNavigationController;
-import com.makaji.aleksej.listopia.ui.shoppinglist.ShoppingListViewModel;
 import com.makaji.aleksej.listopia.util.AutoClearedValue;
 
 import javax.inject.Inject;
@@ -86,6 +78,13 @@ public class LoginFragment extends Fragment implements Injectable {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+
+       /* if (context instanceof OnFragmentSubscription) {
+            onFragmentSubscription = (OnFragmentSubscription) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentSubscriptionListener");
+        }*/
     }
 
     @Override
@@ -149,7 +148,7 @@ public class LoginFragment extends Fragment implements Injectable {
             //if token validation pass (TODO make check)
             sharedPreferences.edit().putString(getString(R.string.key_user_id), userId).commit();
 
-       /*     String ressToken = getResources().getString(R.string.key_token);
+            /*String ressToken = getResources().getString(R.string.key_token);
             String token = sharedPreferences.getString(ressToken, "defualt");
             Timber.d("Token from SP: " + token);*/
             userViewModel.validateToken(userId).observe(this, userResource -> {

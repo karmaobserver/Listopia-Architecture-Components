@@ -38,6 +38,12 @@ public class ApiResponse<T> {
         code = 500;
         body = null;
         errorMessage = error.getMessage();
+        /*if (error instanceof IOException) {
+            errorMessage = "No network error";
+        }
+        else {
+            errorMessage = error.getMessage();
+        }*/
         links = Collections.emptyMap();
     }
 

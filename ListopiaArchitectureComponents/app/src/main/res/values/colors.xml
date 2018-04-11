@@ -10,4 +10,9 @@
     <color name="divider">#BDBDBD</color>
 
     <color name="button_background">#ffffff</color>
+
+    <color name="header_background">#e8e7e5</color>
+
+    <color name="shopping_list_background">#e8e7e5</color>
+
 </resources>
